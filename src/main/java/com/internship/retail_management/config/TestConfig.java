@@ -12,6 +12,7 @@ import com.internship.retail_management.entities.CashRegister;
 import com.internship.retail_management.entities.Iva;
 import com.internship.retail_management.entities.OperatingFund;
 import com.internship.retail_management.entities.Product;
+import com.internship.retail_management.entities.StockMovement;
 import com.internship.retail_management.entities.Store;
 import com.internship.retail_management.entities.User;
 import com.internship.retail_management.entities.enums.Category;
@@ -21,6 +22,7 @@ import com.internship.retail_management.repositories.CashRegisterRepository;
 import com.internship.retail_management.repositories.IvaRepository;
 import com.internship.retail_management.repositories.OperatingFundRepository;
 import com.internship.retail_management.repositories.ProductRepository;
+import com.internship.retail_management.repositories.StockMovementRepository;
 import com.internship.retail_management.repositories.StoreRepository;
 import com.internship.retail_management.repositories.UserRepository;
 
@@ -45,6 +47,9 @@ public class TestConfig implements CommandLineRunner {
 	
 	@Autowired
 	private OperatingFundRepository operatingFundRepository;
+	
+	@Autowired
+	private StockMovementRepository stockMovementRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -87,5 +92,33 @@ public class TestConfig implements CommandLineRunner {
 		
 		productRepository.saveAll(Arrays.asList(p1, p2, p3, p4));
 		
+		p1.addStock(10);
+		p1.addStock(20);
+		p2.addStock(5);
+		p3.subtractStock(5);
+		
+		productRepository.saveAll(Arrays.asList(p1, p2, p3));
+		
+		for (StockMovement movement : p1.getStockMovements())
+		{
+			stockMovementRepository.save(movement);
+		}
+		
+		for (StockMovement movement : p2.getStockMovements())
+		{
+			stockMovementRepository.save(movement);
+		}
+		
+		for (StockMovement movement : p3.getStockMovements())
+		{
+			stockMovementRepository.save(movement);
+		}
+
+//		StockMovement sm1 = new StockMovement(null, 10, Movement.IN, p1);
+//		StockMovement sm2 = new StockMovement(null, 20, Movement.IN, p1);
+//		StockMovement sm3 = new StockMovement(null, 9, Movement.OUT, p2);
+//		
+//		stockMovementRepository.saveAll(Arrays.asList(sm1, sm2, sm3));
+
 	}
 }

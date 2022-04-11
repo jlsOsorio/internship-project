@@ -23,7 +23,7 @@ public enum Status {
 			}
 		}
 
-		throw new IllegalArgumentException("Invalid StoreStatus code!");
+		throw new IllegalArgumentException("Invalid Status value!");
 	}
 
 }

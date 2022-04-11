@@ -23,7 +23,7 @@ public enum Category {
 			}
 		}
 
-		throw new IllegalArgumentException("Invalid StoreStatus code!");
+		throw new IllegalArgumentException("Invalid Category value!");
 	}
 
 }

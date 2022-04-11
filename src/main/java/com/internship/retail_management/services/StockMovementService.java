@@ -6,25 +6,22 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.internship.retail_management.entities.Product;
-import com.internship.retail_management.repositories.ProductRepository;
+import com.internship.retail_management.entities.StockMovement;
+import com.internship.retail_management.repositories.StockMovementRepository;
 
 @Service //regista a classe como componente do Spring para ele conhecer e ser automaticamente injectada (autowired). Existem também o Component e o Repository, para o mesmo fim
-public class ProductService {
+public class StockMovementService {
 	
 	@Autowired
-	private ProductRepository repository;
+	private StockMovementRepository repository;
 	
-//	@Autowired
-//	private StockMovementRepository smRepository;
-	
-	public List<Product> findAll() {
+	public List<StockMovement> findAll() {
 		return repository.findAll();
 	}
 	
-	public Product findById(Long id) {
-		Optional<Product> obj = repository.findById(id);
+	public StockMovement findById(Long id) {
+		Optional<StockMovement> obj = repository.findById(id);
 		return obj.get();
 	}
-	
+
 }
