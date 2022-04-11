@@ -1,6 +1,6 @@
 package com.internship.retail_management.entities.enums;
 
-public enum StoreStatus {
+public enum Status {
 
 	// Numeros para que sejam íntegros ao valor na tabela, caso haja alguma
 	// alteração na enumeração
@@ -8,7 +8,7 @@ public enum StoreStatus {
 
 	private int code;
 
-	private StoreStatus(int code) {
+	private Status(int code) {
 			this.code = code;
 		}
 
@@ -16,8 +16,8 @@ public enum StoreStatus {
 		return code;
 	}
 
-	public static StoreStatus valueOf(int code) {
-		for (StoreStatus value : StoreStatus.values()) {
+	public static Status valueOf(int code) {
+		for (Status value : Status.values()) {
 			if (value.getCode() == code) {
 				return value;
 			}

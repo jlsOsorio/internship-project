@@ -1,5 +1,6 @@
 package com.internship.retail_management.config;
 
+import java.time.Instant;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,14 +10,19 @@ import org.springframework.context.annotation.Profile;
 
 import com.internship.retail_management.entities.CashRegister;
 import com.internship.retail_management.entities.Iva;
+import com.internship.retail_management.entities.OperatingFund;
 import com.internship.retail_management.entities.Product;
 import com.internship.retail_management.entities.Store;
+import com.internship.retail_management.entities.User;
+import com.internship.retail_management.entities.enums.Category;
 import com.internship.retail_management.entities.enums.IvaValues;
-import com.internship.retail_management.entities.enums.StoreStatus;
+import com.internship.retail_management.entities.enums.Status;
 import com.internship.retail_management.repositories.CashRegisterRepository;
 import com.internship.retail_management.repositories.IvaRepository;
+import com.internship.retail_management.repositories.OperatingFundRepository;
 import com.internship.retail_management.repositories.ProductRepository;
 import com.internship.retail_management.repositories.StoreRepository;
+import com.internship.retail_management.repositories.UserRepository;
 
 @Configuration
 @Profile("test")
@@ -33,12 +39,18 @@ public class TestConfig implements CommandLineRunner {
 	
 	@Autowired
 	private CashRegisterRepository cashRegisterRepository;
+	
+	@Autowired
+	private UserRepository employeeRepository;
+	
+	@Autowired
+	private OperatingFundRepository operatingFundRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
 		
-		Store s1 = new Store(null, "Rua de cima", "Porto", "1234-123", "221231212", StoreStatus.ACTIVE);
-		Store s2 = new Store(null, "Rua de baixo", "Gaia", "4321-321", "223212121", StoreStatus.INACTIVE);
+		Store s1 = new Store(null, "Rua de cima", "Porto", "1234-123", "221231212", Status.ACTIVE);
+		Store s2 = new Store(null, "Rua de baixo", "Gaia", "4321-321", "223212121", Status.INACTIVE);
 		
 		storeRepository.saveAll(Arrays.asList(s1, s2));
 		
@@ -49,6 +61,17 @@ public class TestConfig implements CommandLineRunner {
 		CashRegister c5 = new CashRegister(null, s2);
 		
 		cashRegisterRepository.saveAll(Arrays.asList(c1, c2, c3, c4, c5));
+		
+		User emp1 = new User(null, "Maria", "maria@gmail.com", "123456", "911232112", Instant.parse("1974-06-20T19:53:07Z"), 123456789L, Category.EMPLOYEE, Status.ACTIVE, "Rua de cima", "Maia", "1234-123", s1);
+		User emp2 = new User(null, "Quim", "quim@gmail.com", "123456", "911233112", Instant.parse("1980-06-20T19:53:07Z"), 123456784L, Category.EMPLOYEE, Status.ACTIVE, "Rua de baixo", "Gaia", "1235-123", s2);
+
+		employeeRepository.saveAll(Arrays.asList(emp1, emp2));
+		
+		OperatingFund of1 = new OperatingFund(null, 500.00, 470.00 , Instant.parse("2021-06-20T19:53:07Z"), emp2);
+		OperatingFund of2 = new OperatingFund(null, 500.00, 530.00 , Instant.parse("2021-06-20T19:53:07Z"), emp1);
+		OperatingFund of3 = new OperatingFund(null, 470.00, 450.00 , Instant.parse("2021-06-22T19:53:07Z"), emp2);
+
+		operatingFundRepository.saveAll(Arrays.asList(of1, of2, of3));
 		
 		Iva i1 = new Iva(null, IvaValues.NULL);
 		Iva i2 = new Iva(null, IvaValues.LOW);

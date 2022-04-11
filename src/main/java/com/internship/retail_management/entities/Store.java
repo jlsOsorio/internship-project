@@ -11,7 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.internship.retail_management.entities.enums.StoreStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.internship.retail_management.entities.enums.Status;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -46,7 +47,12 @@ public class Store implements Serializable{
 	@OneToMany(mappedBy = "store")
 	private List<CashRegister> cashRegisters = new ArrayList<>();
 	
-	public Store(Long id, String address, String council, String zipCode, String contact, StoreStatus status) {
+	@JsonIgnore
+	@Setter(AccessLevel.NONE)
+	@OneToMany(mappedBy = "store")
+	private List<User> users = new ArrayList<>();
+	
+	public Store(Long id, String address, String council, String zipCode, String contact, Status status) {
 		this.id = id;
 		this.address = address;
 		this.council = council;
@@ -56,11 +62,11 @@ public class Store implements Serializable{
 	}
 	
 
-	public StoreStatus getStatus() {
-		return StoreStatus.valueOf(status);
+	public Status getStatus() {
+		return Status.valueOf(status);
 	}
 
-	public void setStatus(StoreStatus status) {
+	public void setStatus(Status status) {
 		if (status != null)
 		{
 			this.status = status.getCode();
