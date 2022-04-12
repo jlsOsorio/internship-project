@@ -2,17 +2,16 @@ package com.internship.retail_management.entities;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.internship.retail_management.entities.enums.Movement;
 
 import lombok.AccessLevel;
@@ -26,8 +25,8 @@ import lombok.Setter;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @Entity
-@Table(name = "tb_stock_movement")
-public class StockMovement implements Serializable {
+@Table(name = "tb_invoiced_product")
+public class InvoicedProduct implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -37,37 +36,32 @@ public class StockMovement implements Serializable {
 	private Long id;
 	private Integer quantity;
 	
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	private Integer movement;
-	
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
 	
-	@JsonIgnore
-	@OneToOne(mappedBy = "stockMovement", cascade = CascadeType.ALL) //O que foi feito: numa relação de um para um, mete-se o mesmo id em ambas as classes (se uma é id 5, a outra também). Por isso, o cascade é obrigatório.
-	private InvoicedProduct invoicedProduct;
+	@Setter(AccessLevel.NONE)
+	@OneToOne
+	@MapsId //Na classe dependente
+	private StockMovement stockMovement;
 	
-	//Para entrada ou saída directas de stock
-	public StockMovement(Long id, Integer quantity, Movement movement, Product product) {
+	public InvoicedProduct(Long id, Integer quantity, Product product) {
 		super();
 		this.id = id;
 		this.quantity = quantity;
-		setMovement(movement);
 		this.product = product;
+		setStockMovement();
 	}
 	
-	public Movement getMovement() {
-		return Movement.valueOf(movement);
+	public void setStockMovement() {
+		this.stockMovement = new StockMovement(null, quantity, Movement.OUT, product);
+		product.getInvoicedProducts().add(this);
+	}
+	
+	//Necessário meter o "get" para que o valor seja mostrado na execução do controlador (particularidade do Java EE)
+	public Double getSubTotal() {
+		return quantity * (product.getGrossPrice() + product.getTaxedPrice());
 	}
 
-	public void setMovement(Movement movement) {
-		if (movement != null)
-		{
-			this.movement = movement.getCode();
-		}
-	}
-
+	
 }

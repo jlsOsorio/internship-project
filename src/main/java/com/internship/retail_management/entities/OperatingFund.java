@@ -1,5 +1,6 @@
 package com.internship.retail_management.entities;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 import javax.persistence.Entity;
@@ -25,8 +26,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "tb_operating_fund")
-public class OperatingFund {
+public class OperatingFund implements Serializable{
 
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
@@ -39,5 +42,9 @@ public class OperatingFund {
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
+	
+	@ManyToOne
+	@JoinColumn(name = "cash_register_id")
+	private CashRegister cashRegister;
 	
 }

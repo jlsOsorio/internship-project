@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.internship.retail_management.entities.enums.Movement;
 
 import lombok.AccessLevel;
@@ -50,6 +51,11 @@ public class Product implements Serializable {
 	@Setter(AccessLevel.NONE)
 	@OneToMany(mappedBy = "product")
 	private List<StockMovement> stockMovements = new ArrayList<>();
+	
+	@JsonIgnore
+	@Setter(AccessLevel.NONE)
+	@OneToMany(mappedBy = "product")
+	private List<InvoicedProduct> invoicedProducts = new ArrayList<>();
 
 	public Product(Long id, String name, Integer stock, Double grossPrice, Iva ivaValue) {
 		super();
@@ -69,19 +75,40 @@ public class Product implements Serializable {
 		this.taxedPrice = iva.getTax() * grossPrice;
 	}
 
-	public void addStock(Integer qty) {
+	public void updateStock(Integer qty, Movement movType) {
 
-		stock += qty;
+		if (movType == Movement.IN)
+		{
+			stock += qty;
+			stockMovements.add(new StockMovement(null, qty, Movement.IN, this));
+		}
+		else
+		{
+			stock -= qty;
+			stockMovements.add(new StockMovement(null, qty, Movement.OUT, this));	
+		}
 
-		stockMovements.add(new StockMovement(null, qty, Movement.IN, this));
 
 	}
 
-	public void subtractStock(Integer qty) {
-
-		stock -= qty;
-
-		stockMovements.add(new StockMovement(null, qty, Movement.OUT, this));
+	public void updateInvoicedStock() {
+		
+		if (invoicedProducts.size() != 0)
+		{
+			for (InvoicedProduct movement : invoicedProducts)
+			{
+				if (movement.getStockMovement().getMovement() == Movement.IN && movement.getProduct().equals(this))
+				{
+					stock += movement.getQuantity();
+					stockMovements.add(new StockMovement(null, movement.getQuantity(), Movement.IN, this));	
+				}
+				
+				if (movement.getStockMovement().getMovement() == Movement.OUT && movement.getProduct().equals(this))
+				{
+					stock -= movement.getQuantity();
+					stockMovements.add(new StockMovement(null, movement.getQuantity(), Movement.OUT, this));	
+				}
+			}
+		}
 	}
-
 }
