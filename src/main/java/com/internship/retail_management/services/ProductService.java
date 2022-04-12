@@ -16,7 +16,7 @@ public class ProductService {
 	private ProductRepository repository;
 	
 //	@Autowired
-//	private StockMovementRepository smRepository;
+//	private ProductRepository smRepository;
 	
 	public List<Product> findAll() {
 		return repository.findAll();
@@ -26,5 +26,24 @@ public class ProductService {
 		Optional<Product> obj = repository.findById(id);
 		return obj.get();
 	}
+	
+	public Product insert(Product obj) {
+		return repository.save(obj);
+	}
+	
+//	public ProductStockDTO addStock(Long id, Integer qty) {
+//		try
+//		{
+//			Product entity = repository.getOne(id); //o getOne prepara o objecto pelo JPA (é monitorizado). Desta forma, não há necessidade de ir buscar o objecto à base de dados.
+//			entity.addStock(qty);
+//			repository.save(entity);
+//			ProductStockDTO updatedObj = new ProductStockDTO(entity);
+//			return updatedObj;
+//		}
+//		catch (EntityNotFoundException e)
+//		{
+//			throw new ResourceNotFoundException(id);
+//		}
+//	}
 	
 }

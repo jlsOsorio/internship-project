@@ -23,5 +23,9 @@ public class StockMovementService {
 		Optional<StockMovement> obj = repository.findById(id);
 		return obj.get();
 	}
+	
+	public StockMovement insert(StockMovement obj) {
+		return repository.save(obj);
+	}
 
 }

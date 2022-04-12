@@ -2,6 +2,10 @@ package com.internship.retail_management.config;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -99,26 +103,9 @@ public class TestConfig implements CommandLineRunner {
 		
 		productRepository.saveAll(Arrays.asList(p1, p2, p3));
 		
-		for (StockMovement movement : p1.getStockMovements())
-		{
-			stockMovementRepository.save(movement);
-		}
+		List<StockMovement> allMovements = Stream.of(p1.getStockMovements(), p2.getStockMovements(), p3.getStockMovements()).flatMap(Collection::stream).collect(Collectors.toList());
 		
-		for (StockMovement movement : p2.getStockMovements())
-		{
-			stockMovementRepository.save(movement);
-		}
-		
-		for (StockMovement movement : p3.getStockMovements())
-		{
-			stockMovementRepository.save(movement);
-		}
-
-//		StockMovement sm1 = new StockMovement(null, 10, Movement.IN, p1);
-//		StockMovement sm2 = new StockMovement(null, 20, Movement.IN, p1);
-//		StockMovement sm3 = new StockMovement(null, 9, Movement.OUT, p2);
-//		
-//		stockMovementRepository.saveAll(Arrays.asList(sm1, sm2, sm3));
+		allMovements.forEach(movements -> stockMovementRepository.save(movements));
 
 	}
 }
