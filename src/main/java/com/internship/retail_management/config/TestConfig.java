@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import com.internship.retail_management.entities.CashRegister;
+import com.internship.retail_management.entities.Invoice;
 import com.internship.retail_management.entities.InvoicedProduct;
 import com.internship.retail_management.entities.Iva;
 import com.internship.retail_management.entities.OperatingFund;
@@ -24,7 +25,9 @@ import com.internship.retail_management.entities.enums.Category;
 import com.internship.retail_management.entities.enums.IvaValues;
 import com.internship.retail_management.entities.enums.Movement;
 import com.internship.retail_management.entities.enums.Status;
+import com.internship.retail_management.entities.enums.TransactionType;
 import com.internship.retail_management.repositories.CashRegisterRepository;
+import com.internship.retail_management.repositories.InvoiceRepository;
 import com.internship.retail_management.repositories.InvoicedProductRepository;
 import com.internship.retail_management.repositories.IvaRepository;
 import com.internship.retail_management.repositories.OperatingFundRepository;
@@ -60,6 +63,9 @@ public class TestConfig implements CommandLineRunner {
 
 	@Autowired
 	private InvoicedProductRepository invoicedProductRepository;
+	
+	@Autowired
+	private InvoiceRepository invoiceRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -119,9 +125,14 @@ public class TestConfig implements CommandLineRunner {
 
 		allMovements.forEach(movements -> stockMovementRepository.save(movements));
 
-		InvoicedProduct ip1 = new InvoicedProduct(null, 5, p1);
-		InvoicedProduct ip2 = new InvoicedProduct(null, 10, p2);
-		InvoicedProduct ip3 = new InvoicedProduct(null, 10, p4);
+		Invoice in1 = new Invoice(null, Instant.now(), TransactionType.DEBIT, emp1, c5);
+		Invoice in2 = new Invoice(null, Instant.now(), TransactionType.CREDIT, emp2, c2);
+		
+		invoiceRepository.saveAll(Arrays.asList(in1, in2));
+		
+		InvoicedProduct ip1 = new InvoicedProduct(null, 5, p1, in1);
+		InvoicedProduct ip2 = new InvoicedProduct(null, 10, p2, in1);
+		InvoicedProduct ip3 = new InvoicedProduct(null, 10, p4, in2);
 
 		invoicedProductRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 		
@@ -137,7 +148,5 @@ public class TestConfig implements CommandLineRunner {
 
 		productRepository.saveAll(Arrays.asList(p1, p2, p4));
 		
-		p1.getStockMovements().forEach(movement -> System.out.println(movement.getProduct().getName()));
-
 	}
 }

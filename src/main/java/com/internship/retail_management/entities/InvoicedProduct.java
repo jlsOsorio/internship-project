@@ -12,7 +12,9 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.internship.retail_management.entities.enums.Movement;
+import com.internship.retail_management.entities.enums.TransactionType;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -45,23 +47,40 @@ public class InvoicedProduct implements Serializable{
 	@MapsId //Na classe dependente
 	private StockMovement stockMovement;
 	
-	public InvoicedProduct(Long id, Integer quantity, Product product) {
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "invoice_id")
+	private Invoice invoice;
+	
+	public InvoicedProduct(Long id, Integer quantity, Product product, Invoice invoice) {
 		super();
 		this.id = id;
 		this.quantity = quantity;
 		this.product = product;
+		this.invoice = invoice;
 		setStockMovement();
 	}
 	
 	public void setStockMovement() {
-		this.stockMovement = new StockMovement(null, quantity, Movement.OUT, product);
-		product.getInvoicedProducts().add(this);
+		if (invoice.getTransaction() == TransactionType.DEBIT)
+		{
+			this.stockMovement = new StockMovement(null, quantity, Movement.OUT, product);
+			product.getInvoicedProducts().add(this);
+		}
+		
+		if (invoice.getTransaction() == TransactionType.CREDIT)
+		{
+			this.stockMovement = new StockMovement(null, quantity, Movement.IN, product);
+			product.getInvoicedProducts().add(this);
+		}
 	}
 	
 	//Necessário meter o "get" para que o valor seja mostrado na execução do controlador (particularidade do Java EE)
-	public Double getSubTotal() {
+	public Double getSubTotalIva() {
 		return quantity * (product.getGrossPrice() + product.getTaxedPrice());
 	}
 
-	
+	public Double getSubTotalNoIva() {
+		return quantity * (product.getGrossPrice());
+	}
 }
