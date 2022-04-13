@@ -21,6 +21,15 @@ import com.internship.retail_management.entities.enums.Status;
 import com.internship.retail_management.repositories.StoreRepository;
 import com.internship.retail_management.repositories.UserRepository;
 
+/**
+ * This class tests if you can save a user,
+ * get a user, get multiple users,
+ * update a user and delete a user.
+ * 
+ * @author Bruno Soares
+ * @author João Osório
+ * @version 1.0
+ */
 @DataJpaTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UserRepositoryTests {
@@ -30,7 +39,12 @@ public class UserRepositoryTests {
 	
 	@Autowired
 	private StoreRepository storeRepository;
-	// Save User
+
+	/**
+	 * Saves a user and tests if that user is saved by
+	 * searching its id and checking if it's greater than 0.
+	 * 
+	 */
 	@Test
 	@Order(1)
 	@Rollback(value = false)
@@ -50,7 +64,11 @@ public class UserRepositoryTests {
 	}
 	
 	
-	// Get user with specific ID
+	/**
+	 * Gets a user with a specific id and confirms 
+	 * that the id matches.
+	 * 
+	 */
 	@Test
 	@Order(2)
 	public void getUserTest() {	
@@ -60,7 +78,11 @@ public class UserRepositoryTests {
 		
 	}
 	
-	// Get all users	
+	/**
+	 * Gets all the users and confirms that the size
+	 * of the user list is greater than 0.
+	 * 
+	 */	
 	@Test
 	@Order(3)
 	public void getUsersTest() {
@@ -70,7 +92,12 @@ public class UserRepositoryTests {
 		
 	}
 	
-	// Update user (email)
+	/**
+	 * Finds a user by id and updates its email.
+	 * Then it checks if the current email value matches
+	 * our requested value.
+	 * 
+	 */
 	@Test
 	@Order(4)
 	public void updateUserTest() {
@@ -80,7 +107,12 @@ public class UserRepositoryTests {
 		Assertions.assertThat(userUpdated.getEmail()).isEqualTo("anamaria@gmail.com");
 	}
 	
-	// Delete user
+	/**
+	 * Finds a user by id and deletes it. Then
+	 * checks for the user by email and sees if it finds
+	 * the deleted user, by returning null confirms
+	 * that the user was successfully deleted.
+	 */
 	@Test
 	@Order(5)
 	public void deleteUserTest() {
@@ -96,7 +128,12 @@ public class UserRepositoryTests {
 		Assertions.assertThat(userNull).isNull();
 	}
 	
-	// Delete user by id
+	/**
+	 * Deletes a user by id. Then checks for the
+	 * user by name and sees if it finds
+	 * the deleted user, by returning null confirms
+	 * that the user was successfully deleted.
+	 */
 	@Test
 	@Order(6)
 	public void deleteUserIdTest() {

@@ -16,6 +16,15 @@ import com.internship.retail_management.entities.Store;
 import com.internship.retail_management.entities.enums.Status;
 import com.internship.retail_management.repositories.StoreRepository;
 
+/**
+ * This class tests if you can save a store,
+ * get a store, get multiple stores,
+ * update a store and delete a store.
+ * 
+ * @author Bruno Soares
+ * @author João Osório
+ * @version 1.0
+ */
 @DataJpaTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class StoreRepositoryTests {
@@ -23,7 +32,11 @@ public class StoreRepositoryTests {
 	@Autowired
 	private StoreRepository storeRepository;
 
-	// Save Store
+	/**
+	 * Saves a store and tests if that store is saved by
+	 * searching its id and checking if it's greater than 0.
+	 * 
+	 */
 	@Test
 	@Order(1)
 	@Rollback(value = false)
@@ -37,7 +50,11 @@ public class StoreRepositoryTests {
 		Assertions.assertThat(store2.getId()).isGreaterThan(0);
 	}
 
-	// Get store with specific ID
+	/**
+	 * Gets a store with a specific id and confirms 
+	 * that the id matches.
+	 * 
+	 */
 	@Test
 	@Order(2)
 	public void getStoreTest() {
@@ -47,7 +64,11 @@ public class StoreRepositoryTests {
 
 	}
 
-	// Get all stores
+	/**
+	 * Gets all the stores and confirms that the size
+	 * of the store list is greater than 0.
+	 * 
+	 */
 	@Test
 	@Order(3)
 	public void getStoresTest() {
@@ -57,7 +78,12 @@ public class StoreRepositoryTests {
 
 	}
 
-	// Update store (status)
+	/**
+	 * Finds a store by id and updates its status.
+	 * Then it checks if the current status value matches
+	 * our requested value.
+	 * 
+	 */
 	@Test
 	@Order(4)
 	public void updateStoreTest() {
@@ -67,7 +93,12 @@ public class StoreRepositoryTests {
 		Assertions.assertThat(storeUpdated.getStatus()).isEqualTo(Status.INACTIVE);
 	}
 
-	// Delete store
+	/**
+	 * Finds a store by id and deletes it. Then
+	 * checks for the store by zip code and sees if it finds
+	 * the deleted store, by returning null confirms
+	 * that the store was successfully deleted.
+	 */
 	@Test
 	@Order(5)
 	public void deleteStoreTest() {
@@ -82,7 +113,12 @@ public class StoreRepositoryTests {
 		Assertions.assertThat(storeNull).isNull();
 	}
 
-	// Delete store by id
+	/**
+	 * Deletes a store by id. Then checks for the
+	 * store by zip code and sees if it finds
+	 * the deleted store, by returning null confirms
+	 * that the store was successfully deleted.
+	 */
 	@Test
 	@Order(6)
 	public void deleteStoreIdTest() {

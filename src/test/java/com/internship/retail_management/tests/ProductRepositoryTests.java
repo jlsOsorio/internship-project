@@ -19,7 +19,15 @@ import com.internship.retail_management.entities.enums.IvaValues;
 import com.internship.retail_management.repositories.IvaRepository;
 import com.internship.retail_management.repositories.ProductRepository;
 
-
+/**
+ * This class tests if you can save a product,
+ * get a product, get multiple products,
+ * update a product and delete a product.
+ * 
+ * @author Bruno Soares
+ * @author João Osório
+ * @version 1.0
+ */
 @DataJpaTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ProductRepositoryTests {
@@ -29,7 +37,11 @@ public class ProductRepositoryTests {
 	@Autowired
 	private IvaRepository ivaRepository;
 	
-	// Save Product
+	/**
+	 * Saves a product and tests if that product is saved by
+	 * searching its id and checking if it's greater than 0.
+	 * 
+	 */
 	@Test
 	@Order(1)
 	@Rollback(value = false)
@@ -50,7 +62,11 @@ public class ProductRepositoryTests {
 		Assertions.assertThat(product2.getId()).isGreaterThan(0);
 	}
 
-	// Get product with specific ID
+	/**
+	 * Gets a product with a specific id and confirms 
+	 * that the id matches.
+	 * 
+	 */
 	@Test
 	@Order(2)
 	public void getProductTest() {
@@ -60,7 +76,11 @@ public class ProductRepositoryTests {
 
 	}
 
-	// Get all products
+	/**
+	 * Gets all the products and confirms that the size
+	 * of the product list is greater than 0.
+	 * 
+	 */
 	@Test
 	@Order(3)
 	public void getProductsTest() {
@@ -70,7 +90,12 @@ public class ProductRepositoryTests {
 
 	}
 
-	// Update product (stock)
+	/**
+	 * Finds a product by id and updates its stock.
+	 * Then it checks if the current stock value matches
+	 * our requested value.
+	 * 
+	 */
 	@Test
 	@Order(4)
 	public void updateProductTest() {
@@ -80,7 +105,12 @@ public class ProductRepositoryTests {
 		Assertions.assertThat(productUpdated.getStock()).isEqualTo(15);
 	}
 
-	// Delete product
+	/**
+	 * Finds a product by id and deletes it. Then
+	 * checks for the product by name and sees if it finds
+	 * the deleted product, by returning null confirms
+	 * that the product was successfully deleted.
+	 */
 	@Test
 	@Order(5)
 	public void deleteProductTest() {
@@ -95,7 +125,12 @@ public class ProductRepositoryTests {
 		Assertions.assertThat(productNull).isNull();
 	}
 
-	// Delete product by id
+	/**
+	 * Deletes a product by id. Then checks for the
+	 * product by name and sees if it finds
+	 * the deleted product, by returning null confirms
+	 * that the product was successfully deleted.
+	 */
 	@Test
 	@Order(6)
 	public void deleteProductIdTest() {
