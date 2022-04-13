@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.internship.retail_management.services.exceptions.DatabaseException;
 import com.internship.retail_management.services.exceptions.ResourceNotFoundException;
 import com.internship.retail_management.services.exceptions.ServiceException;
+import com.internship.retail_management.services.exceptions.StockException;
 
 @ControllerAdvice //Intersecta as excepções que acontecerem, para que possamos tratar, deste lado, essas mesmas excepções
 public class ResourceExceptionHandler {
@@ -37,6 +38,14 @@ public class ResourceExceptionHandler {
 	public ResponseEntity<StandardError> serviceException(ServiceException e, HttpServletRequest request) {
 		String error = "Insert error";
 		HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
+		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(status).body(err);
+	}
+	
+	@ExceptionHandler(StockException.class)
+	public ResponseEntity<StandardError> database(StockException e, HttpServletRequest request) {
+		String error = "Stock error";
+		HttpStatus status = HttpStatus.BAD_REQUEST;
 		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(status).body(err);
 	}

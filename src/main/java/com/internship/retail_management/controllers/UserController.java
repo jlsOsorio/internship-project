@@ -18,7 +18,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.internship.retail_management.dto.UserDTO;
 import com.internship.retail_management.dto.UserInsertDTO;
 import com.internship.retail_management.services.UserService;
-import com.internship.retail_management.services.exceptions.ServiceException;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -43,14 +42,9 @@ public class UserController {
 
 	@PostMapping
 	public ResponseEntity<UserDTO> insert(@RequestBody UserInsertDTO dto) {
-		try {
-			UserDTO obj = service.insert(dto);
-			URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId())
-					.toUri();
-			return ResponseEntity.created(uri).body(obj);
-		} catch (ServiceException e) {
-			return ResponseEntity.unprocessableEntity().build();
-		}
+		UserDTO obj = service.insert(dto);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+		return ResponseEntity.created(uri).body(obj);
 
 	}
 

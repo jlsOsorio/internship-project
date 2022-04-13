@@ -46,36 +46,44 @@ public class UserService {
 	}
 
 	public UserDTO insert(@RequestBody UserInsertDTO dto) {
-		User user = repository.findByEmail(dto.getEmail());
-		if (user != null) {
-			throw new ServiceException("Email already exists!");
+		try
+		{
+			User user = repository.findByEmail(dto.getEmail());
+			if (user != null) {
+				throw new ServiceException("Email already exists!");
+			}
+
+			user = repository.findByNif(dto.getNif());
+			if (user != null) {
+				throw new ServiceException("Nif already exists!");
+			}
+
+			// Instancia um novo user, porque na base de dados está um utilizador, e não o
+			// DTO
+			User obj = new User();
+
+			obj.setName(dto.getName());
+			obj.setEmail(dto.getEmail());
+			obj.setPassword(passwordEncoder.encode(dto.getPassword()));
+			obj.setBirthDate(dto.getBirthDate());
+			obj.setNif(dto.getNif());
+			obj.setCategory(dto.getCategory());
+			obj.setStatus(dto.getStatus());
+			obj.setAddress(dto.getAddress());
+			obj.setCouncil(dto.getCouncil());
+			obj.setCouncil(dto.getCouncil());
+			obj.setZipCode(dto.getZipCode());
+			obj.setStore(dto.getStore());
+
+			obj = repository.save(obj);
+
+			return new UserDTO(obj);
 		}
-
-		user = repository.findByNif(dto.getNif());
-		if (user != null) {
-			throw new ServiceException("Nif already exists!");
+		catch (Exception e)
+		{
+			throw new ServiceException("Something went wrong!");
 		}
-
-		// Instancia um novo user, porque na base de dados está um utilizador, e não o
-		// DTO
-		User obj = new User();
-
-		obj.setName(dto.getName());
-		obj.setEmail(dto.getEmail());
-		obj.setPassword(passwordEncoder.encode(dto.getPassword()));
-		obj.setBirthDate(dto.getBirthDate());
-		obj.setNif(dto.getNif());
-		obj.setCategory(dto.getCategory());
-		obj.setStatus(dto.getStatus());
-		obj.setAddress(dto.getAddress());
-		obj.setCouncil(dto.getCouncil());
-		obj.setCouncil(dto.getCouncil());
-		obj.setZipCode(dto.getZipCode());
-		obj.setStore(dto.getStore());
-
-		obj = repository.save(obj);
-
-		return new UserDTO(obj);
+		
 
 	}
 
@@ -96,8 +104,7 @@ public class UserService {
 															// monitorizado). Desta forma, não há necessidade de ir
 															// buscar o objecto à base de dados.
 
-			
-			if (checkEmailNif(entity, obj)) {
+			if (checkEmailNif(obj)) {
 				throw new ServiceException("There is already someone with inserted unique data (email or nif).");
 			}
 
@@ -126,9 +133,14 @@ public class UserService {
 		entity.setStore(obj.getStore());
 	}
 
-	public boolean checkEmailNif(User entity, UserInsertDTO obj) {
-		if (entity.getEmail().equals(obj.getEmail()) || entity.getNif() == obj.getNif()) {
-			return true;
+	public boolean checkEmailNif(UserInsertDTO obj) {
+		List<User> users = repository.findAll();
+		
+		for (User entity : users)
+		{
+			if (entity.getEmail().equals(obj.getEmail()) || entity.getNif() == obj.getNif()) {
+				return true;
+			}
 		}
 
 		return false;
