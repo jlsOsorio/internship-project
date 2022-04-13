@@ -8,4 +8,5 @@ import com.internship.retail_management.entities.User;
 public interface UserRepository extends JpaRepository<User, Long>{
 
 	User findByEmail(String email);
+	User findByNif(Long nif);
 }
