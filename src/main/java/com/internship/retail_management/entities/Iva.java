@@ -23,7 +23,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode
 @NoArgsConstructor
 @Entity
 @Table(name = "tb_iva")
@@ -33,7 +33,6 @@ public class Iva implements Tax, Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@EqualsAndHashCode.Include
 	private Long id;
 	
 	@Getter(AccessLevel.NONE)

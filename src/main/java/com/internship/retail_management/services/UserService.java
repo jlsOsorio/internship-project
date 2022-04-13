@@ -10,7 +10,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.internship.retail_management.dto.UserDTO;
 import com.internship.retail_management.dto.UserInsertDTO;
@@ -45,7 +44,7 @@ public class UserService {
 		}
 	}
 
-	public UserDTO insert(@RequestBody UserInsertDTO dto) {
+	public UserDTO insert(UserInsertDTO dto) {
 		try
 		{
 			User user = repository.findByEmail(dto.getEmail());
