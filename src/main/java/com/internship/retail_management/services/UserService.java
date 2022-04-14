@@ -61,24 +61,25 @@ public class UserService {
 			// DTO
 			User obj = new User();
 
-			obj.setName(dto.getName());
-			obj.setEmail(dto.getEmail());
-			obj.setPassword(passwordEncoder.encode(dto.getPassword()));
-			obj.setBirthDate(dto.getBirthDate());
-			obj.setNif(dto.getNif());
-			obj.setCategory(dto.getCategory());
-			obj.setStatus(dto.getStatus());
-			obj.setAddress(dto.getAddress());
-			obj.setCouncil(dto.getCouncil());
-			obj.setCouncil(dto.getCouncil());
-			obj.setZipCode(dto.getZipCode());
-			obj.setStore(dto.getStore());
+			persistData(obj, dto);
+//			obj.setName(dto.getName());
+//			obj.setEmail(dto.getEmail());
+//			obj.setPassword(passwordEncoder.encode(dto.getPassword()));
+//			obj.setBirthDate(dto.getBirthDate());
+//			obj.setNif(dto.getNif());
+//			obj.setCategory(dto.getCategory());
+//			obj.setStatus(dto.getStatus());
+//			obj.setAddress(dto.getAddress());
+//			obj.setCouncil(dto.getCouncil());
+//			obj.setCouncil(dto.getCouncil());
+//			obj.setZipCode(dto.getZipCode());
+//			obj.setStore(dto.getStore());
 
 			obj = repository.save(obj);
 
 			return new UserDTO(obj);
 		}
-		catch (Exception e)
+		catch (IllegalArgumentException e)
 		{
 			throw new ServiceException("Something went wrong!");
 		}
@@ -103,11 +104,11 @@ public class UserService {
 															// monitorizado). Desta forma, não há necessidade de ir
 															// buscar o objecto à base de dados.
 
-			if (checkEmailNif(obj)) {
+			if (checkEmailNif(id, obj)) {
 				throw new ServiceException("There is already someone with inserted unique data (email or nif).");
 			}
 
-			updateData(entity, obj);
+			persistData(entity, obj);
 
 			repository.save(entity);
 
@@ -117,10 +118,10 @@ public class UserService {
 		}
 	}
 
-	private void updateData(User entity, UserInsertDTO obj) {
+	private void persistData(User entity, UserInsertDTO obj) {
 		entity.setName(obj.getName());
 		entity.setEmail(obj.getEmail());
-		entity.setPassword(obj.getPassword());
+		entity.setPassword(passwordEncoder.encode(obj.getPassword()));
 		entity.setPhone(obj.getPhone());
 		entity.setBirthDate(obj.getBirthDate());
 		entity.setNif(obj.getNif());
@@ -132,9 +133,11 @@ public class UserService {
 		entity.setStore(obj.getStore());
 	}
 
-	public boolean checkEmailNif(UserInsertDTO obj) {
+	public boolean checkEmailNif(Long id, UserInsertDTO obj) {
 		List<User> users = repository.findAll();
-		
+		//Deve poder alterar o seu próprio email ou nif, por isso, estes não podem contar para comparação
+		users.removeIf(user -> user.getId() == id);
+
 		for (User entity : users)
 		{
 			if (entity.getEmail().equals(obj.getEmail()) || entity.getNif() == obj.getNif()) {

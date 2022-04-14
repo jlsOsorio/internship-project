@@ -9,25 +9,22 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ProductInsertDTO {
+public class ProductUpdateDTO {
 	
 	private String name;
-	private Integer stock;
 	private Integer ivaValue;
 	private Double grossPrice;
 	
-	public ProductInsertDTO(String name, Integer stock, Integer ivaValue, Double grossPrice) {
+	public ProductUpdateDTO(String name, Integer ivaValue, Double grossPrice) {
 		super();
 		this.name = name;
-		this.stock = stock;
 		this.ivaValue = ivaValue;
 		this.grossPrice = grossPrice;
 	}
 	
-	public ProductInsertDTO(Product entity) {
+	public ProductUpdateDTO(Product entity) {
 		super();
 		this.name = entity.getName();
-		this.stock = entity.getStock();
 		this.ivaValue = entity.getIvaValue().getValue().getCode();
 		this.grossPrice = entity.getGrossPrice();
 	}
