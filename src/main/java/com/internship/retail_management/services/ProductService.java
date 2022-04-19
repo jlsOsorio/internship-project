@@ -65,11 +65,15 @@ public class ProductService {
 			Product obj = new Product();
 			persistData(obj, dto);
 
-			obj = repository.save(obj);
-
+			
+			
 			obj.getStockMovements().add(new StockMovement(null, obj.getStock(), Movement.IN, obj));
-			smService.insert(obj.getStockMovements().get(0));
-
+			
+			obj = repository.save(obj);
+		
+			StockMovement smDTO = obj.getStockMovements().get(0);
+			smService.insert(smDTO);
+			
 			return new ProductDTO(obj);
 		} catch (IllegalFormatException e) {
 			throw new ServiceException("Something went wrong!");
@@ -77,17 +81,6 @@ public class ProductService {
 
 	}
 
-	public void delete(Long id) {
-		try {
-			repository.deleteById(id);
-		} catch (EmptyResultDataAccessException e) {
-			throw new ResourceNotFoundException(id);
-		} catch (DataIntegrityViolationException e) {
-			throw new DatabaseException(e.getMessage());
-		}
-
-	}
-	
 	public ProductDTO update(Long id, ProductUpdateDTO obj) {
 		try {
 			Product entity = repository.findById(id).get(); // o getOne (deprecated e, por isso, não usado) prepara o objecto pelo JPA (é
@@ -104,6 +97,31 @@ public class ProductService {
 			throw new ResourceNotFoundException(id);
 		}
 	}
+	
+	public void delete(Long id) {
+		try {
+			repository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseException(e.getMessage());
+		}
+
+	}
+	
+	public void updateStock(Long id, Integer stock) {
+		Product stockProd = repository.findById(id).get();
+		stockProd.setStock(stock);
+
+		StockMovement stockMovement = smService.findAll().get(smService.findAll().size() - 1);
+		stockMovement.setProduct(stockProd);
+		stockProd.getStockMovements().add(stockMovement);
+		
+		
+		repository.save(stockProd);
+
+		System.out.println(stockMovement.getMovement());
+	}
 
 	public Iva getIva(Integer value) {
 		List<Iva> list = ivaService.findAll();
@@ -118,7 +136,18 @@ public class ProductService {
 
 	}
 	
-	private void persistData(Product entity, ProductInsertDTO obj) {
+	public void productDTO(Product entity, ProductDTO obj) {
+		Iva iva = getIva(obj.getIvaValue());
+		
+		entity.setId(obj.getId());
+		entity.setName(obj.getName());
+		entity.setIvaValue(iva);
+		entity.setStock(obj.getStock());
+		entity.setGrossPrice(obj.getGrossPrice());
+		entity.setTaxedPrice(iva);
+	}
+	
+	public void persistData(Product entity, ProductInsertDTO obj) {
 		Iva iva = getIva(obj.getIvaValue());
 		
 		entity.setName(obj.getName());
@@ -135,6 +164,10 @@ public class ProductService {
 		entity.setIvaValue(iva);
 		entity.setGrossPrice(obj.getGrossPrice());
 		entity.setTaxedPrice(iva);
+	}
+	
+	public void updateStockDTO(Product entity, ProductDTO obj) {
+		entity.setStock(obj.getStock());
 	}
 
 }
