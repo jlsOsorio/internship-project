@@ -1,10 +1,6 @@
 package com.internship.retail_management.repositories;
 
-<<<<<<< HEAD
-import java.net.InterfaceAddress;
-=======
 import java.util.List;
->>>>>>> 9644dfcef947e975262f3a830a0736258c4bad5b
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -61,8 +61,8 @@ public class InvoicedProduct implements Serializable{
 	
 	/**
 	 * Constructor that creates a invoiced product.
-	 * @param id invoiced product id
-	 * @param quantity product quantity
+	 * @param id invoiced product's id
+	 * @param quantity product's quantity
 	 * @param product product's id
 	 * @param invoice invoice's id
 	 */

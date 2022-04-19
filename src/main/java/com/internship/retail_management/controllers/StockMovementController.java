@@ -43,7 +43,6 @@ public class StockMovementController {
 		return ResponseEntity.ok().body(list); //retorna a resposta
 	}
 	
-<<<<<<< HEAD
 	/**
 	 * Retrieves stock movement by id.
 	 * @param id stock movement's id
@@ -53,12 +52,12 @@ public class StockMovementController {
 	public ResponseEntity<StockMovement> findById(@PathVariable Long id) {
 		StockMovement obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
-=======
+	}
+		
 	@GetMapping(value = "/{productId}")
 	public ResponseEntity<List<StockMovement>> findByProduct(@PathVariable Long productId) {
 		List<StockMovement> list = service.findByProduct(productId);
 		return ResponseEntity.ok().body(list);
->>>>>>> 9644dfcef947e975262f3a830a0736258c4bad5b
 	}
 
 //	@PostMapping

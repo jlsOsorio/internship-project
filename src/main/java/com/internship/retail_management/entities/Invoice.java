@@ -103,8 +103,8 @@ public class Invoice implements Serializable {
 	}
 	
 	/**
-	 * Calculates the sum of all products iva and returns it.
-	 * @return Total of products iva
+	 * Calculates the sum of all products IVA and returns it.
+	 * @return Total of products IVA
 	 */
 	public Double getTotalIva() {
 		Double sum = 0.0;
@@ -117,8 +117,8 @@ public class Invoice implements Serializable {
 	}
 	
 	/**
-	 * Calculates the sum of all products without iva.
-	 * @return Total of products without iva
+	 * Calculates the sum of all products without IVA.
+	 * @return Total of products without IVA
 	 */
 	public Double getTotalNoIva() {
 		Double sum = 0.0;

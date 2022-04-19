@@ -36,16 +36,12 @@ public class ProductController {
 	@Autowired
 	private ProductService service;
 	
-<<<<<<< HEAD
-	@Autowired
-	private StockMovementService smService;
 	
 	/**
 	 * Retrieves product list.
 	 * @return response
 	 */
-=======
->>>>>>> 9644dfcef947e975262f3a830a0736258c4bad5b
+
 	@GetMapping //método que responde sobre o método Get do HTTP
 	public ResponseEntity<List<ProductDTO>> findAll() {
 		List<ProductDTO> list = service.findAll(); 
