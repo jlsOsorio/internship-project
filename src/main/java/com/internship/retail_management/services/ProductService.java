@@ -136,15 +136,16 @@ public class ProductService {
 
 	}
 	
-	public void productDTO(Product entity, ProductDTO obj) {
-		Iva iva = getIva(obj.getIvaValue());
-		
-		entity.setId(obj.getId());
-		entity.setName(obj.getName());
-		entity.setIvaValue(iva);
-		entity.setStock(obj.getStock());
-		entity.setGrossPrice(obj.getGrossPrice());
-		entity.setTaxedPrice(iva);
+	public Product productFromProductDTO(ProductDTO obj) {
+		return repository.findById(obj.getId()).get();
+//		Iva iva = getIva(obj.getIvaValue());
+//		
+//		entity.setId(obj.getId());
+//		entity.setName(obj.getName());
+//		entity.setIvaValue(iva);
+//		entity.setStock(obj.getStock());
+//		entity.setGrossPrice(obj.getGrossPrice());
+//		entity.setTaxedPrice(iva);
 	}
 	
 	public void persistData(Product entity, ProductInsertDTO obj) {

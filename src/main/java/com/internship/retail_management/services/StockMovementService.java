@@ -47,8 +47,7 @@ public class StockMovementService {
 	public List<StockMovement> findByProduct(Long productId) {
 		try {
 			ProductDTO productDTO = productService.findById(productId);
-			Product product = new Product();
-			productService.productDTO(product, productDTO);
+			Product product = productService.productFromProductDTO(productDTO);
 			return repository.findByProduct(product);
 		} catch (NoSuchElementException e) {
 			throw new ResourceNotFoundException(productId);

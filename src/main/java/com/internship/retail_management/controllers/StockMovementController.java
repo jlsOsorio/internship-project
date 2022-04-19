@@ -43,17 +43,18 @@ public class StockMovementController {
 		return ResponseEntity.ok().body(list); //retorna a resposta
 	}
 	
-	/**
-	 * Retrieves stock movement by id.
-	 * @param id stock movement's id
-	 * @return response
-	 */
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<StockMovement> findById(@PathVariable Long id) {
-		StockMovement obj = service.findById(id);
-		return ResponseEntity.ok().body(obj);
-	}
+	
+//	@GetMapping(value = "/{id}")
+//	public ResponseEntity<StockMovement> findById(@PathVariable Long id) {
+//		StockMovement obj = service.findById(id);
+//		return ResponseEntity.ok().body(obj);
+//	}
 		
+	/**
+	 * Retrieves stock movements from products.
+	 * @param id product's id
+	 * @return list of movements from a product
+	 */
 	@GetMapping(value = "/{productId}")
 	public ResponseEntity<List<StockMovement>> findByProduct(@PathVariable Long productId) {
 		List<StockMovement> list = service.findByProduct(productId);

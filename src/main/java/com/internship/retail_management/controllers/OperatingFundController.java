@@ -1,14 +1,21 @@
 package com.internship.retail_management.controllers;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.internship.retail_management.dto.OperatingFundInsertDTO;
 import com.internship.retail_management.entities.OperatingFund;
 import com.internship.retail_management.services.OperatingFundService;
 
@@ -38,14 +45,28 @@ public class OperatingFundController {
 	}
 	
 	/**
-	 * Retrieves operating fund id.
-	 * @param id operating fund's id
-	 * @return response
+	 * Retrieves list of operating funds from a user.
+	 * @param id user's id
+	 * @return all operating funds
 	 */
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<OperatingFund> findById(@PathVariable Long id) {
-		OperatingFund obj = service.findById(id);
-		return ResponseEntity.ok().body(obj);
+	@PostMapping(value = "/{userId}")
+	public ResponseEntity<OperatingFund> findByUser(@PathVariable Long userId, @RequestBody OperatingFundInsertDTO dto) {
+		OperatingFund obj = service.insertOperatingFund(userId, dto);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+		return ResponseEntity.created(uri).body(obj);
 	}
 
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<OperatingFund> update(@PathVariable Long id, @RequestBody OperatingFundInsertDTO dto) {
+		OperatingFund obj = service.update(id, dto);
+		return ResponseEntity.ok().body(obj);
+
+	}
+	
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
+		service.delete(id);
+		return ResponseEntity.noContent().build();
+
+	}
 }

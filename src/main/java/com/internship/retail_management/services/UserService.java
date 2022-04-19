@@ -118,6 +118,10 @@ public class UserService {
 		}
 	}
 
+	public User userFromUserDTO(UserDTO obj) {
+		return repository.findById(obj.getId()).get();
+	}
+	
 	private void persistData(User entity, UserInsertDTO obj) {
 		entity.setName(obj.getName());
 		entity.setEmail(obj.getEmail());
