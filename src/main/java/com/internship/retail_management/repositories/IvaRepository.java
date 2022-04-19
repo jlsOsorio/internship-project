@@ -11,6 +11,6 @@ import com.internship.retail_management.entities.Iva;
  * @version 1.0
  */
 //Aqui não é necessário registar @Repository porque já está a herdar de uma componente do Spring
-public interface IvaRepository extends JpaRepository<Iva, Long>{
+public interface IvaRepository extends JpaRepository<Iva, Long> {
 
 }

@@ -7,6 +7,7 @@ import com.internship.retail_management.entities.User;
 import com.internship.retail_management.entities.enums.Category;
 import com.internship.retail_management.entities.enums.Status;
 
+<<<<<<< HEAD
 /**
  * Data transfer object class for the user.
  * @author Bruno Soares
@@ -14,6 +15,17 @@ import com.internship.retail_management.entities.enums.Status;
  * @version 1.0
  *
  */
+=======
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+>>>>>>> 9644dfcef947e975262f3a830a0736258c4bad5b
 public class UserDTO {
 
 	private Long id;
@@ -29,6 +41,7 @@ public class UserDTO {
 	private String zipCode;
 	private Store store;
 	
+<<<<<<< HEAD
 	/**
 	 * Constructor with no arguments for the user DTO.
 	 */
@@ -70,6 +83,8 @@ public class UserDTO {
 	 * Retrieves user.
 	 * @param entity
 	 */
+=======
+>>>>>>> 9644dfcef947e975262f3a830a0736258c4bad5b
 	public UserDTO(User entity) {
 		super();
 		this.id = entity.getId();
@@ -85,6 +100,7 @@ public class UserDTO {
 		this.zipCode = entity.getZipCode();
 		this.store = entity.getStore();
 	}
+<<<<<<< HEAD
 
 	/**
 	 * Getter for user's id.
@@ -277,4 +293,6 @@ public class UserDTO {
 	public void setStore(Store store) {
 		this.store = store;
 	}
+=======
+>>>>>>> 9644dfcef947e975262f3a830a0736258c4bad5b
 }

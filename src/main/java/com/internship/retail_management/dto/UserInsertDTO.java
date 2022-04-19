@@ -7,6 +7,7 @@ import com.internship.retail_management.entities.User;
 import com.internship.retail_management.entities.enums.Category;
 import com.internship.retail_management.entities.enums.Status;
 
+<<<<<<< HEAD
 /**
  * Data transfer object class for inserting a user.
  * @author Bruno Soares
@@ -14,6 +15,17 @@ import com.internship.retail_management.entities.enums.Status;
  * @version 1.0
  *
  */
+=======
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+>>>>>>> 9644dfcef947e975262f3a830a0736258c4bad5b
 public class UserInsertDTO {
 
 	private String name;
@@ -28,6 +40,7 @@ public class UserInsertDTO {
 	private String council;
 	private String zipCode;
 	private Store store;
+<<<<<<< HEAD
 	
 	/**
 	 * Constructor with no arguments for the user insert DTO.
@@ -70,6 +83,9 @@ public class UserInsertDTO {
 	 * Retrieves user's insert.
 	 * @param entity
 	 */
+=======
+
+>>>>>>> 9644dfcef947e975262f3a830a0736258c4bad5b
 	public UserInsertDTO(User entity) {
 		super();
 		this.name = entity.getName();
@@ -86,6 +102,7 @@ public class UserInsertDTO {
 		this.store = entity.getStore();
 	}
 
+<<<<<<< HEAD
 	/**
 	 * Getter for user's insert name.
 	 * @return
@@ -277,4 +294,6 @@ public class UserInsertDTO {
 	public void setStore(Store store) {
 		this.store = store;
 	}
+=======
+>>>>>>> 9644dfcef947e975262f3a830a0736258c4bad5b
 }
