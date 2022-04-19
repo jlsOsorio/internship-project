@@ -19,6 +19,13 @@ import com.internship.retail_management.entities.enums.Movement;
 import com.internship.retail_management.services.ProductService;
 import com.internship.retail_management.services.StockMovementService;
 
+/**
+ * This class works as a controller for the product.
+ * @author Bruno Soares
+ * @author João Osório
+ * @version 1.0
+ *
+ */
 @RestController
 @RequestMapping(value = "/products")
 public class ProductController {
@@ -30,18 +37,32 @@ public class ProductController {
 	@Autowired
 	private StockMovementService smService;
 	
+	/**
+	 * Retrieves product list.
+	 * @return response
+	 */
 	@GetMapping //método que responde sobre o método Get do HTTP
 	public ResponseEntity<List<Product>> findAll() {
 		List<Product> list = service.findAll(); 
 		return ResponseEntity.ok().body(list); //retorna a resposta
 	}
 	
+	/**
+	 * Retrieves product by id.
+	 * @param id product's id
+	 * @return response
+	 */
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Product> findById(@PathVariable Long id) {
 		Product obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
+	/**
+	 * Inserts a new product in the list.
+	 * @param obj product
+	 * @return response
+	 */
 	@PostMapping //RequestBody permite que, no momento da requisição, esta possa ser feita em JSON, e devolver o objecto, desserializando-o
 	public ResponseEntity<Product> insert(@RequestBody Product obj) {
 		obj = service.insert(obj);

@@ -78,58 +78,58 @@ public class StoreRepositoryTests {
 
 	}
 
-	/**
-	 * Finds a store by id and updates its status.
-	 * Then it checks if the current status value matches
-	 * our requested value.
-	 * 
-	 */
-	@Test
-	@Order(4)
-	public void updateStoreTest() {
-		Store storeTest = storeRepository.findById(1L).get();
-		storeTest.setStatus(Status.INACTIVE);
-		Store storeUpdated = storeRepository.save(storeTest);
-		Assertions.assertThat(storeUpdated.getStatus()).isEqualTo(Status.INACTIVE);
-	}
-
-	/**
-	 * Finds a store by id and deletes it. Then
-	 * checks for the store by zip code and sees if it finds
-	 * the deleted store, by returning null confirms
-	 * that the store was successfully deleted.
-	 */
-	@Test
-	@Order(5)
-	public void deleteStoreTest() {
-		Store storeTest = storeRepository.findById(1L).get();
-		storeRepository.delete(storeTest);
-		Store storeNull = null;
-		Store storeT = storeRepository.findByZipCode("1234-123");
-		Optional<Store> optionalStore = Optional.ofNullable(storeT);
-		if (optionalStore.isPresent()) {
-			storeNull = optionalStore.get();
-		}
-		Assertions.assertThat(storeNull).isNull();
-	}
-
-	/**
-	 * Deletes a store by id. Then checks for the
-	 * store by zip code and sees if it finds
-	 * the deleted store, by returning null confirms
-	 * that the store was successfully deleted.
-	 */
-	@Test
-	@Order(6)
-	public void deleteStoreIdTest() {
-		storeRepository.deleteById(2L);
-		Store storeNull = null;
-		Store storeT = storeRepository.findByZipCode("4321-321");
-		Optional<Store> optionalStore = Optional.ofNullable(storeT);
-		if (optionalStore.isPresent()) {
-			storeNull = optionalStore.get();
-		}
-		Assertions.assertThat(storeNull).isNull();
-	}
+//	/**
+//	 * Finds a store by id and updates its status.
+//	 * Then it checks if the current status value matches
+//	 * our requested value.
+//	 * 
+//	 */
+//	@Test
+//	@Order(4)
+//	public void updateStoreTest() {
+//		Store storeTest = storeRepository.findById(1L).get();
+//		storeTest.setStatus(Status.INACTIVE);
+//		Store storeUpdated = storeRepository.save(storeTest);
+//		Assertions.assertThat(storeUpdated.getStatus()).isEqualTo(Status.INACTIVE);
+//	}
+//
+//	/**
+//	 * Finds a store by id and deletes it. Then
+//	 * checks for the store by zip code and sees if it finds
+//	 * the deleted store, by returning null confirms
+//	 * that the store was successfully deleted.
+//	 */
+//	@Test
+//	@Order(5)
+//	public void deleteStoreTest() {
+//		Store storeTest = storeRepository.findById(1L).get();
+//		storeRepository.delete(storeTest);
+//		Store storeNull = null;
+//		Store storeT = storeRepository.findByZipCode("1234-123");
+//		Optional<Store> optionalStore = Optional.ofNullable(storeT);
+//		if (optionalStore.isPresent()) {
+//			storeNull = optionalStore.get();
+//		}
+//		Assertions.assertThat(storeNull).isNull();
+//	}
+//
+//	/**
+//	 * Deletes a store by id. Then checks for the
+//	 * store by zip code and sees if it finds
+//	 * the deleted store, by returning null confirms
+//	 * that the store was successfully deleted.
+//	 */
+//	@Test
+//	@Order(6)
+//	public void deleteStoreIdTest() {
+//		storeRepository.deleteById(2L);
+//		Store storeNull = null;
+//		Store storeT = storeRepository.findByZipCode("4321-321");
+//		Optional<Store> optionalStore = Optional.ofNullable(storeT);
+//		if (optionalStore.isPresent()) {
+//			storeNull = optionalStore.get();
+//		}
+//		Assertions.assertThat(storeNull).isNull();
+//	}
 
 }

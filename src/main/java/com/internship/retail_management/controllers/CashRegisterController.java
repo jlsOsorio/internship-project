@@ -12,6 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.internship.retail_management.entities.CashRegister;
 import com.internship.retail_management.services.CashRegisterService;
 
+/**
+ * This class works as a controller for the cash register.
+ * @author Bruno Soares
+ * @author João Osório
+ * @version 1.0
+ *
+ */
 @RestController
 @RequestMapping(value = "/cashregisters")
 public class CashRegisterController {
@@ -20,12 +27,21 @@ public class CashRegisterController {
 	@Autowired
 	private CashRegisterService service;
 	
+	/**
+	 * Retrieves cash register list.
+	 * @return response
+	 */
 	@GetMapping //método que responde sobre o método Get do HTTP
 	public ResponseEntity<List<CashRegister>> findAll() {
 		List<CashRegister> list = service.findAll(); 
 		return ResponseEntity.ok().body(list); //retorna a resposta
 	}
 	
+	/**
+	 * Retrieves cash register by id.
+	 * @param id cash register's id
+	 * @return response
+	 */
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<CashRegister> findById(@PathVariable Long id) {
 		CashRegister obj = service.findById(id);

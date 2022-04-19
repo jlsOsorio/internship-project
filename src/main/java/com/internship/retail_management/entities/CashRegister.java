@@ -21,6 +21,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * This class represents a cash register.
+ * 
+ * @author Bruno Soares
+ * @author João Osório
+ * @version 1.0
+ *
+ */
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -46,6 +54,12 @@ public class CashRegister implements Serializable {
 	@OneToMany(mappedBy = "cashRegister")
 	List<OperatingFund> operatingFunds = new ArrayList<>();
 
+	/**
+	 * Constructor that creates a cash register.
+	 * 
+	 * @param id Cash register's id
+	 * @param store Store's id
+	 */
 	public CashRegister(Long id, Store store) {
 		super();
 		this.id = id;

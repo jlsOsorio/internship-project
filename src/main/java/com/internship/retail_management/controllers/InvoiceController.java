@@ -12,6 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.internship.retail_management.entities.Invoice;
 import com.internship.retail_management.services.InvoiceService;
 
+/**
+ * This class works as a controller for the invoice.
+ * @author Bruno Soares
+ * @author João Osório
+ * @version 1.0
+ *
+ */
 @RestController
 @RequestMapping(value = "/invoices")
 public class InvoiceController {
@@ -20,12 +27,21 @@ public class InvoiceController {
 	@Autowired
 	private InvoiceService service;
 	
+	/**
+	 * Retrieves invoice list.
+	 * @return response
+	 */
 	@GetMapping //método que responde sobre o método Get do HTTP
 	public ResponseEntity<List<Invoice>> findAll() {
 		List<Invoice> list = service.findAll(); 
 		return ResponseEntity.ok().body(list); //retorna a resposta
 	}
 	
+	/**
+	 * Retrieves invoice by id.
+	 * @param id invoice's id
+	 * @return response
+	 */
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Invoice> findById(@PathVariable Long id) {
 		Invoice obj = service.findById(id);

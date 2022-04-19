@@ -22,6 +22,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * This class represents a invoiced product.
+ * 
+ * @author Bruno Soares
+ * @author João Osório
+ * @version 1.0
+ */
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -52,6 +59,13 @@ public class InvoicedProduct implements Serializable{
 	@JoinColumn(name = "invoice_id")
 	private Invoice invoice;
 	
+	/**
+	 * Constructor that creates a invoiced product.
+	 * @param id invoiced product id
+	 * @param quantity product quantity
+	 * @param product product's id
+	 * @param invoice invoice's id
+	 */
 	public InvoicedProduct(Long id, Integer quantity, Product product, Invoice invoice) {
 		super();
 		this.id = id;
@@ -61,6 +75,11 @@ public class InvoicedProduct implements Serializable{
 		setStockMovement();
 	}
 	
+	/**
+	 * Sets stock movement based on the transaction type.
+	 * Adds it to the invoiced products list.
+	 * 
+	 */
 	public void setStockMovement() {
 		if (invoice.getTransaction() == TransactionType.DEBIT)
 		{
@@ -76,10 +95,20 @@ public class InvoicedProduct implements Serializable{
 	}
 	
 	//Necessário meter o "get" para que o valor seja mostrado na execução do controlador (particularidade do Java EE)
+	/**
+	 * Calculates the IVA sub total by adding the product's gross price and the taxed price and
+	 * multiplying for the quantity of the product.
+	 * @return Sub total with IVA
+	 */
 	public Double getSubTotalIva() {
 		return quantity * (product.getGrossPrice() + product.getTaxedPrice());
 	}
 
+	/**
+	 * Calculates the sub total without IVA by multiplying the product's gross price with the
+	 * amount of said product. 
+	 * @return Sub total without IVA
+	 */
 	public Double getSubTotalNoIva() {
 		return quantity * (product.getGrossPrice());
 	}

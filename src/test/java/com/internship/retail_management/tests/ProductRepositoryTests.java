@@ -90,58 +90,58 @@ public class ProductRepositoryTests {
 
 	}
 
-	/**
-	 * Finds a product by id and updates its stock.
-	 * Then it checks if the current stock value matches
-	 * our requested value.
-	 * 
-	 */
-	@Test
-	@Order(4)
-	public void updateProductTest() {
-		Product productTest = productRepository.findById(1L).get();
-		productTest.setStock(15);
-		Product productUpdated = productRepository.save(productTest);
-		Assertions.assertThat(productUpdated.getStock()).isEqualTo(15);
-	}
-
-	/**
-	 * Finds a product by id and deletes it. Then
-	 * checks for the product by name and sees if it finds
-	 * the deleted product, by returning null confirms
-	 * that the product was successfully deleted.
-	 */
-	@Test
-	@Order(5)
-	public void deleteProductTest() {
-		Product productTest = productRepository.findById(1L).get();
-		productRepository.delete(productTest);
-		Product productNull = null;
-		Product productT = productRepository.findByName("pao");
-		Optional<Product> optionalProduct = Optional.ofNullable(productT);
-		if (optionalProduct.isPresent()) {
-			productNull = optionalProduct.get();
-		}
-		Assertions.assertThat(productNull).isNull();
-	}
-
-	/**
-	 * Deletes a product by id. Then checks for the
-	 * product by name and sees if it finds
-	 * the deleted product, by returning null confirms
-	 * that the product was successfully deleted.
-	 */
-	@Test
-	@Order(6)
-	public void deleteProductIdTest() {
-		productRepository.deleteById(2L);
-		Product productNull = null;
-		Product productT = productRepository.findByName("agua");
-		Optional<Product> optionalProduct = Optional.ofNullable(productT);
-		if (optionalProduct.isPresent()) {
-			productNull = optionalProduct.get();
-		}
-		Assertions.assertThat(productNull).isNull();
-	}
+//	/**
+//	 * Finds a product by id and updates its stock.
+//	 * Then it checks if the current stock value matches
+//	 * our requested value.
+//	 * 
+//	 */
+//	@Test
+//	@Order(4)
+//	public void updateProductTest() {
+//		Product productTest = productRepository.findById(1L).get();
+//		productTest.setStock(15);
+//		Product productUpdated = productRepository.save(productTest);
+//		Assertions.assertThat(productUpdated.getStock()).isEqualTo(15);
+//	}
+//
+//	/**
+//	 * Finds a product by id and deletes it. Then
+//	 * checks for the product by name and sees if it finds
+//	 * the deleted product, by returning null confirms
+//	 * that the product was successfully deleted.
+//	 */
+//	@Test
+//	@Order(5)
+//	public void deleteProductTest() {
+//		Product productTest = productRepository.findById(1L).get();
+//		productRepository.delete(productTest);
+//		Product productNull = null;
+//		Product productT = productRepository.findByName("pao");
+//		Optional<Product> optionalProduct = Optional.ofNullable(productT);
+//		if (optionalProduct.isPresent()) {
+//			productNull = optionalProduct.get();
+//		}
+//		Assertions.assertThat(productNull).isNull();
+//	}
+//
+//	/**
+//	 * Deletes a product by id. Then checks for the
+//	 * product by name and sees if it finds
+//	 * the deleted product, by returning null confirms
+//	 * that the product was successfully deleted.
+//	 */
+//	@Test
+//	@Order(6)
+//	public void deleteProductIdTest() {
+//		productRepository.deleteById(2L);
+//		Product productNull = null;
+//		Product productT = productRepository.findByName("agua");
+//		Optional<Product> optionalProduct = Optional.ofNullable(productT);
+//		if (optionalProduct.isPresent()) {
+//			productNull = optionalProduct.get();
+//		}
+//		Assertions.assertThat(productNull).isNull();
+//	}
 
 }

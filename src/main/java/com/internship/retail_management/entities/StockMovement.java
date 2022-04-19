@@ -21,6 +21,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * This class represents a stock movement.
+ * 
+ * @author Bruno Soares
+ * @author João Osório
+ * @version 1.0
+ */
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -51,6 +58,13 @@ public class StockMovement implements Serializable {
 	private InvoicedProduct invoicedProduct;
 	
 	//Para entrada ou saída directas de stock
+	/**
+	 * Constructor for stock movements.
+	 * @param id stock movement's id
+	 * @param quantity quantity of the product
+	 * @param movement type of stock movement either IN or OUT
+	 * @param product product's id
+	 */
 	public StockMovement(Long id, Integer quantity, Movement movement, Product product) {
 		super();
 		this.id = id;
@@ -58,11 +72,18 @@ public class StockMovement implements Serializable {
 		setMovement(movement);
 		this.product = product;
 	}
-	
+	/**
+	 * Retrieves a movement.
+	 * @return
+	 */
 	public Movement getMovement() {
 		return Movement.valueOf(movement);
 	}
 
+	/**
+	 * Sets movement.
+	 * @param movement
+	 */
 	public void setMovement(Movement movement) {
 		if (movement != null)
 		{

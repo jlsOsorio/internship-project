@@ -23,6 +23,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * This class represents a invoice.
+ * 
+ * @author Bruno Soares
+ * @author João Osório
+ * @version 1.0
+ */
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -57,6 +64,15 @@ public class Invoice implements Serializable {
 	@OneToMany(mappedBy = "invoice")
 	List<InvoicedProduct> invoicedProducts = new ArrayList<>();
 
+	/**
+	 * Constructor that creates a invoice.
+	 * 
+	 * @param invoiceNumber invoice's id
+	 * @param date invoice's date
+	 * @param transaction invoice's transaction
+	 * @param user user's id
+	 * @param cashRegister cash register's id
+	 */
 	public Invoice(Long invoiceNumber, Instant date, TransactionType transaction, User user,
 			CashRegister cashRegister) {
 		super();
@@ -67,10 +83,18 @@ public class Invoice implements Serializable {
 		this.cashRegister = cashRegister;
 	}
 
+	/**
+	 * Gets a transaction.
+	 * @return transaction
+	 */
 	public TransactionType getTransaction() {
 		return TransactionType.valueOf(transaction);
 	}
 
+	/**
+	 * Sets transaction.
+	 * @param transaction transaction type
+	 */
 	public void setTransaction(TransactionType transaction) {
 		if (transaction != null)
 		{
@@ -78,6 +102,10 @@ public class Invoice implements Serializable {
 		}
 	}
 	
+	/**
+	 * Calculates the sum of all products iva and returns it.
+	 * @return Total of products iva
+	 */
 	public Double getTotalIva() {
 		Double sum = 0.0;
 		for (InvoicedProduct product : invoicedProducts)
@@ -88,6 +116,10 @@ public class Invoice implements Serializable {
 		return sum;
 	}
 	
+	/**
+	 * Calculates the sum of all products without iva.
+	 * @return Total of products without iva
+	 */
 	public Double getTotalNoIva() {
 		Double sum = 0.0;
 		for (InvoicedProduct product : invoicedProducts)

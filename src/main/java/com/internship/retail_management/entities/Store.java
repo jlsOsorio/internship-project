@@ -20,6 +20,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * This class represents a store.
+ * 
+ * @author Bruno Soares
+ * @author João Osório
+ * @version 1.0
+ */
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -52,6 +59,15 @@ public class Store implements Serializable{
 	@OneToMany(mappedBy = "store")
 	private List<User> users = new ArrayList<>();
 	
+	/**
+	 * Constructor that creates a store.
+	 * @param id Store's id
+	 * @param address Store's address
+	 * @param council Store's council
+	 * @param zipCode Store's zip code
+	 * @param contact Store's contact
+	 * @param status Store's current status
+	 */
 	public Store(Long id, String address, String council, String zipCode, String contact, Status status) {
 		this.id = id;
 		this.address = address;
@@ -61,11 +77,18 @@ public class Store implements Serializable{
 		setStatus(status);
 	}
 	
-
+	/**
+	 * Retrieves the store's current status.
+	 * @return
+	 */
 	public Status getStatus() {
 		return Status.valueOf(status);
 	}
 
+	/**
+	 * Sets the store's current status.
+	 * @param status
+	 */
 	public void setStatus(Status status) {
 		if (status != null)
 		{

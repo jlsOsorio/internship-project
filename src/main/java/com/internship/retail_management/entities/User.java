@@ -27,6 +27,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * This class represents a user.
+ * 
+ * @author Bruno Soares
+ * @author João Osório
+ * @version 1.0
+ */
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -79,6 +86,23 @@ public class User implements Serializable{
 	@OneToMany(mappedBy = "user")
 	Set<Invoice> invoices = new HashSet<>();
 
+	/**
+	 * Constructor that creates a user.
+	 * 
+	 * @param id User's id
+	 * @param name User's name
+	 * @param email User's email
+	 * @param password User's password
+	 * @param phone User's phone number
+	 * @param birthDate User's birth date
+	 * @param nif User's tax identification number
+	 * @param category User's category either EMPLOYEE or SUPERVISOR
+	 * @param status User's status either ACTIVE or INACTIVE
+	 * @param address User's address
+	 * @param council User's council
+	 * @param zipCode User's zip code
+	 * @param store User's store id
+	 */
 	public User(Long id, String name, String email, String password, String phone, Instant birthDate, Long nif,
 			Category category, Status status, String address, String council, String zipCode, Store store) {
 		super();
@@ -97,18 +121,34 @@ public class User implements Serializable{
 		this.store = store;
 	}
 
+	/**
+	 * Retrieves the status for the user.
+	 * @return
+	 */
 	public Status getStatus() {
 		return Status.valueOf(status);
 	}
 
+	/**
+	 * Sets the status for the user.
+	 * @param status
+	 */
 	public void setStatus(Status status) {
 		this.status = status.getCode();
 	}
 
+	/**
+	 * Retrieves the category for the user.
+	 * @return
+	 */
 	public Category getCategory() {
 		return Category.valueOf(category);
 	}
 
+	/**
+	 * Sets the category for the user.
+	 * @param category
+	 */
 	public void setCategory(Category category) {
 		if (category != null)
 		{

@@ -19,6 +19,13 @@ import com.internship.retail_management.dto.UserDTO;
 import com.internship.retail_management.dto.UserInsertDTO;
 import com.internship.retail_management.services.UserService;
 
+/**
+ * This class works as a controller for the user.
+ * @author Bruno Soares
+ * @author João Osório
+ * @version 1.0
+ *
+ */
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
@@ -27,12 +34,21 @@ public class UserController {
 	@Autowired
 	private UserService service;
 
+	/**
+	 * Retrieves user list.
+	 * @return response
+	 */
 	@GetMapping // método que responde sobre o método Get do HTTP
 	public ResponseEntity<List<UserDTO>> findAll() {
 		List<UserDTO> list = service.findAll();
 		return ResponseEntity.ok().body(list); // retorna a resposta
 	}
 
+	/**
+	 * Retrieves user by id.
+	 * @param id user's id
+	 * @return response
+	 */
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
 		UserDTO obj = service.findById(id);
@@ -40,6 +56,11 @@ public class UserController {
 
 	}
 
+	/**
+	 * Inserts a new user in the list.
+	 * @param obj user
+	 * @return response
+	 */
 	@PostMapping
 	public ResponseEntity<UserDTO> insert(@RequestBody UserInsertDTO dto) {
 		UserDTO obj = service.insert(dto);
@@ -48,6 +69,11 @@ public class UserController {
 
 	}
 
+	/**
+	 * Deletes a user from the list using his id.
+	 * @param id user's id
+	 * @return
+	 */
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		service.delete(id);
@@ -55,6 +81,12 @@ public class UserController {
 
 	}
 
+	/**
+	 * Edit a user with his id.
+	 * @param id user's id
+	 * @param dto
+	 * @return
+	 */
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody UserInsertDTO dto) {
 		UserDTO obj = service.update(id, dto);
