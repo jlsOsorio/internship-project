@@ -31,6 +31,9 @@ public class OperatingFundService {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private CashRegisterService cashRegisterService;
 
 	public List<OperatingFund> findAll() {
 		return repository.findAll();
@@ -51,7 +54,7 @@ public class OperatingFundService {
 		}
 	}
 
-	public OperatingFund insertOperatingFund(Long userId, OperatingFundInsertDTO dto) {
+	public OperatingFund insert(Long userId, OperatingFundInsertDTO dto) {
 		try {
 
 			OperatingFund obj = new OperatingFund();
@@ -98,7 +101,14 @@ public class OperatingFundService {
 
 			return entity;
 		} catch (NoSuchElementException e) {
-			throw new ResourceNotFoundException(id);
+			if (repository.findById(id).isEmpty())
+			{
+				throw new ResourceNotFoundException(id);
+			}
+			else
+			{
+				throw new ResourceNotFoundException(obj.getCashRegisterId());
+			}
 		} catch  (DataIntegrityViolationException e) {
 			throw new DatabaseException(e.getMessage());
 		}
@@ -118,7 +128,7 @@ public class OperatingFundService {
 	private void persistData(OperatingFund obj, OperatingFundInsertDTO dto) {
 		obj.setEntryQty(dto.getEntryQty());
 		obj.setExitQty(dto.getExitQty());
-		obj.setCashRegister(dto.getCashRegister());
+		obj.setCashRegister(cashRegisterService.findById(dto.getCashRegisterId()));
 		obj.setMoment(dto.getMoment());
 	}
 

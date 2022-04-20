@@ -27,6 +27,8 @@ public class UserService {
 	@Autowired
 	private UserRepository repository;
 
+	@Autowired StoreService storeService;
+	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
@@ -62,18 +64,6 @@ public class UserService {
 			User obj = new User();
 
 			persistData(obj, dto);
-//			obj.setName(dto.getName());
-//			obj.setEmail(dto.getEmail());
-//			obj.setPassword(passwordEncoder.encode(dto.getPassword()));
-//			obj.setBirthDate(dto.getBirthDate());
-//			obj.setNif(dto.getNif());
-//			obj.setCategory(dto.getCategory());
-//			obj.setStatus(dto.getStatus());
-//			obj.setAddress(dto.getAddress());
-//			obj.setCouncil(dto.getCouncil());
-//			obj.setCouncil(dto.getCouncil());
-//			obj.setZipCode(dto.getZipCode());
-//			obj.setStore(dto.getStore());
 
 			obj = repository.save(obj);
 
@@ -134,7 +124,7 @@ public class UserService {
 		entity.setAddress(obj.getAddress());
 		entity.setCouncil(obj.getCouncil());
 		entity.setZipCode(obj.getZipCode());
-		entity.setStore(obj.getStore());
+		entity.setStore(storeService.findById(obj.getStoreId()));
 	}
 
 	public boolean checkEmailNif(Long id, UserInsertDTO obj) {

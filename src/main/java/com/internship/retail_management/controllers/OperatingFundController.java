@@ -36,7 +36,7 @@ public class OperatingFundController {
 	
 	/**
 	 * Retrieves operating fund list.
-	 * @return response
+	 * @return all operating funds 
 	 */
 	@GetMapping //método que responde sobre o método Get do HTTP
 	public ResponseEntity<List<OperatingFund>> findAll() {
@@ -47,11 +47,22 @@ public class OperatingFundController {
 	/**
 	 * Retrieves list of operating funds from a user.
 	 * @param id user's id
-	 * @return all operating funds
+	 * @return all operating funds from the user
+	 */
+	@GetMapping(value = "/{userId}") 
+	public ResponseEntity<List<OperatingFund>> findByUser(@PathVariable Long userId) {
+		List<OperatingFund> list = service.findByUser(userId); 
+		return ResponseEntity.ok().body(list); //retorna a resposta
+	}
+	
+	/**
+	 * Creates an operating fund from a user.
+	 * @param id user's id
+	 * @return response of the created operating fund
 	 */
 	@PostMapping(value = "/{userId}")
-	public ResponseEntity<OperatingFund> findByUser(@PathVariable Long userId, @RequestBody OperatingFundInsertDTO dto) {
-		OperatingFund obj = service.insertOperatingFund(userId, dto);
+	public ResponseEntity<OperatingFund> insert(@PathVariable Long userId, @RequestBody OperatingFundInsertDTO dto) {
+		OperatingFund obj = service.insert(userId, dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).body(obj);
 	}

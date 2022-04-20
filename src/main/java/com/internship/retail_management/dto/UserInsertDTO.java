@@ -2,7 +2,6 @@ package com.internship.retail_management.dto;
 
 import java.time.Instant;
 
-import com.internship.retail_management.entities.Store;
 import com.internship.retail_management.entities.User;
 import com.internship.retail_management.entities.enums.Category;
 import com.internship.retail_management.entities.enums.Status;
@@ -54,7 +53,7 @@ public class UserInsertDTO {
 	private String address;
 	private String council;
 	private String zipCode;
-	private Store store;
+	private Long storeId;
 	
 	/**
 	 * Retrieves user's insert.
@@ -73,7 +72,7 @@ public class UserInsertDTO {
 		this.address = entity.getAddress();
 		this.council = entity.getCouncil();
 		this.zipCode = entity.getZipCode();
-		this.store = entity.getStore();
+		this.storeId = entity.getStore().getId();
 	}
 
 }

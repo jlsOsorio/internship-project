@@ -2,7 +2,6 @@ package com.internship.retail_management.dto;
 
 import java.time.Instant;
 
-import com.internship.retail_management.entities.CashRegister;
 import com.internship.retail_management.entities.OperatingFund;
 
 import lombok.AllArgsConstructor;
@@ -18,13 +17,13 @@ public class OperatingFundInsertDTO {
 
 	private Double entryQty;
 	private Double exitQty;
-	private CashRegister cashRegister;
+	private Long cashRegisterId;
 	private Instant moment;
 	
 	public OperatingFundInsertDTO(OperatingFund entity) {
 		this.entryQty = entity.getEntryQty();
 		this.exitQty = entity.getExitQty();
-		this.cashRegister = entity.getCashRegister();
+		this.cashRegisterId = entity.getCashRegister().getId();
 		this.moment = entity.getMoment();
 	}
 }
