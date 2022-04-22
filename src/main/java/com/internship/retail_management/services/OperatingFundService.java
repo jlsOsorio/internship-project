@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -37,11 +36,6 @@ public class OperatingFundService {
 
 	public List<OperatingFund> findAll() {
 		return repository.findAll();
-	}
-
-	public OperatingFund findById(Long id) {
-		Optional<OperatingFund> obj = repository.findById(id);
-		return obj.get();
 	}
 
 	public List<OperatingFund> findByUser(Long userId) {

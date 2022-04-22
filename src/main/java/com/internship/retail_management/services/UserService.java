@@ -27,8 +27,9 @@ public class UserService {
 	@Autowired
 	private UserRepository repository;
 
-	@Autowired StoreService storeService;
-	
+	@Autowired
+	StoreService storeService;
+
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
@@ -47,8 +48,7 @@ public class UserService {
 	}
 
 	public UserDTO insert(UserInsertDTO dto) {
-		try
-		{
+		try {
 			User user = repository.findByEmail(dto.getEmail());
 			if (user != null) {
 				throw new ServiceException("Email already exists!");
@@ -68,12 +68,9 @@ public class UserService {
 			obj = repository.save(obj);
 
 			return new UserDTO(obj);
-		}
-		catch (IllegalArgumentException e)
-		{
+		} catch (IllegalArgumentException e) {
 			throw new ServiceException("Something went wrong!");
 		}
-		
 
 	}
 
@@ -111,7 +108,7 @@ public class UserService {
 	public User userFromUserDTO(UserDTO obj) {
 		return repository.findById(obj.getId()).get();
 	}
-	
+
 	private void persistData(User entity, UserInsertDTO obj) {
 		entity.setName(obj.getName());
 		entity.setEmail(obj.getEmail());
@@ -129,11 +126,11 @@ public class UserService {
 
 	public boolean checkEmailNif(Long id, UserInsertDTO obj) {
 		List<User> users = repository.findAll();
-		//Deve poder alterar o seu próprio email ou nif, por isso, estes não podem contar para comparação
+		// Deve poder alterar o seu próprio email ou nif, por isso, estes não podem
+		// contar para comparação
 		users.removeIf(user -> user.getId() == id);
 
-		for (User entity : users)
-		{
+		for (User entity : users) {
 			if (entity.getEmail().equals(obj.getEmail()) || entity.getNif() == obj.getNif()) {
 				return true;
 			}

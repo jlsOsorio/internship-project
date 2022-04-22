@@ -15,6 +15,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.internship.retail_management.entities.enums.Movement;
+import com.internship.retail_management.entities.enums.TransactionType;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -96,7 +97,10 @@ public class Product implements Serializable {
 	 * @param iva product's IVA
 	 */
 	public void setTaxedPrice(Iva iva) {
-		this.taxedPrice = iva.getTax() * grossPrice;
+		if (iva != null)
+		{
+			this.taxedPrice = iva.getTax() * grossPrice;
+		}
 	}
 
 	/**
@@ -126,20 +130,30 @@ public class Product implements Serializable {
 		
 		if (invoicedProducts.size() != 0)
 		{
-			for (InvoicedProduct movement : invoicedProducts)
-			{
-				if (movement.getStockMovement().getMovement() == Movement.IN && movement.getProduct().equals(this))
-				{
-					stock += movement.getQuantity();
-					stockMovements.add(new StockMovement(null, movement.getQuantity(), Movement.IN, this));	
-				}
-				
-				if (movement.getStockMovement().getMovement() == Movement.OUT && movement.getProduct().equals(this))
-				{
-					stock -= movement.getQuantity();
-					stockMovements.add(new StockMovement(null, movement.getQuantity(), Movement.OUT, this));	
-				}
+			InvoicedProduct invoiceProduct = invoicedProducts.get(invoicedProducts.size() - 1);
+			if (invoiceProduct.getInvoice().getTransaction() == TransactionType.CREDIT) {
+				stock += invoiceProduct.getQuantity();
+				stockMovements.add(new StockMovement(null, invoiceProduct.getQuantity(), Movement.IN, this));	
 			}
+			
+			if (invoiceProduct.getInvoice().getTransaction() == TransactionType.DEBIT) {
+				stock -= invoiceProduct.getQuantity();
+				stockMovements.add(new StockMovement(null, invoiceProduct.getQuantity(), Movement.OUT, this));	
+			}
+//			for (InvoicedProduct movement : invoicedProducts)
+//			{
+//				if (movement.getInvoice().getTransaction() == TransactionType.CREDIT && movement.getProduct().equals(this))
+//				{
+//					stock += movement.getQuantity();
+//					stockMovements.add(new StockMovement(null, movement.getQuantity(), Movement.IN, this));	
+//				}
+//				
+//				if (movement.getInvoice().getTransaction() == TransactionType.DEBIT && movement.getProduct().equals(this))
+//				{
+//					stock -= movement.getQuantity();
+//					stockMovements.add(new StockMovement(null, movement.getQuantity(), Movement.OUT, this));	
+//				}
+//			}
 		}
 	}
 }

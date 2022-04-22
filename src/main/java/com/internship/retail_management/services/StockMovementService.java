@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.internship.retail_management.dto.ProductDTO;
 import com.internship.retail_management.dto.StockMovementInsertDTO;
+import com.internship.retail_management.entities.InvoicedProduct;
 import com.internship.retail_management.entities.Product;
 import com.internship.retail_management.entities.StockMovement;
 import com.internship.retail_management.entities.enums.Movement;
@@ -86,11 +87,41 @@ public class StockMovementService {
 				newStock -= obj.getQuantity();
 			}
 
+			stockProdDTO.getStockMovements().add(obj);
 			StockMovement stockMovement = repository.save(obj);
 
 			productService.updateStock(productId, newStock);
 
 			return stockMovement;
+		} catch (IllegalFormatException e) {
+			throw new ServiceException("Something went wrong!");
+		}
+
+	}
+	
+	public void insertInvoicedProduct(InvoicedProduct obj) {
+		try {
+
+			obj.getProduct().updateInvoicedStock();
+			
+			StockMovement stockMovement = obj.getProduct().getStockMovements().get(obj.getProduct().getStockMovements().size() - 1);
+			
+//			persistData(obj, dto);
+//
+//			ProductDTO productDTO = productService.findById(productId);
+//			Product product = productService.productFromProductDTO(productDTO);
+//			
+//			if (obj.getQuantity() <= 0) {
+//				throw new ServiceException("The quantity of the movement must be a positive number.");
+//			}
+//
+//			product.updateInvoicedStock();
+//
+			repository.save(stockMovement);
+
+			productService.updateStock(obj.getProduct().getId(), obj.getProduct().getStock());
+
+			
 		} catch (IllegalFormatException e) {
 			throw new ServiceException("Something went wrong!");
 		}

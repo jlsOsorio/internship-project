@@ -55,9 +55,25 @@ public class ProductService {
 			throw new ResourceNotFoundException(id);
 		}
 	}
+	
+	public ProductDTO findByName(String name) {
+		try {
+			Product obj = repository.findByName(name);
+			return new ProductDTO(obj);
+		} catch (NoSuchElementException e) {
+			throw new ResourceNotFoundException(name);
+		}
+	}
 
 	public ProductDTO insert(ProductInsertDTO dto) {
 		try {
+			Product product = repository.findByName(dto.getName());
+			
+			if (product != null)
+			{
+				throw new ServiceException("This product already exists");
+			}
+			
 			if (dto.getStock() < 0) {
 				throw new StockException(dto.getStock());
 			}
@@ -71,8 +87,8 @@ public class ProductService {
 			
 			obj = repository.save(obj);
 		
-			StockMovement smDTO = obj.getStockMovements().get(0);
-			smService.insert(smDTO);
+			StockMovement stockMovement = obj.getStockMovements().get(0);
+			smService.insert(stockMovement);
 			
 			return new ProductDTO(obj);
 		} catch (IllegalFormatException e) {
@@ -86,7 +102,10 @@ public class ProductService {
 			Product entity = repository.findById(id).get(); // o getOne (deprecated e, por isso, não usado) prepara o objecto pelo JPA (é
 															// monitorizado). Desta forma, não há necessidade de ir
 															// buscar o objecto à base de dados.
-
+			if (checkName(id, obj))
+			{
+				throw new ServiceException("There is already someone with inserted unique data (name).");
+			}
 
 			updateData(entity, obj);
 
@@ -115,12 +134,10 @@ public class ProductService {
 
 		StockMovement stockMovement = smService.findAll().get(smService.findAll().size() - 1);
 		stockMovement.setProduct(stockProd);
-		stockProd.getStockMovements().add(stockMovement);
+		//stockProd.getStockMovements().add(stockMovement);
 		
 		
 		repository.save(stockProd);
-
-		System.out.println(stockMovement.getMovement());
 	}
 
 	public Iva getIva(Integer value) {
@@ -169,6 +186,22 @@ public class ProductService {
 	
 	public void updateStockDTO(Product entity, ProductDTO obj) {
 		entity.setStock(obj.getStock());
+	}
+	
+	public boolean checkName(Long id, ProductUpdateDTO obj) {
+		List<Product> products = repository.findAll();
+		//Deve poder alterar o seu próprio nome, por isso, este não pode contar para comparação
+		products.removeIf(product -> product.getId() == id);
+
+		for (Product entity : products)
+		{
+			if (entity.getName().equals(obj.getName())) {
+				return true;
+			}
+		}
+
+		return false;
+
 	}
 
 }

@@ -2,14 +2,12 @@ package com.internship.retail_management.entities;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -53,9 +51,9 @@ public class StockMovement implements Serializable {
 	@JoinColumn(name = "product_id")
 	private Product product;
 	
-	@JsonIgnore
-	@OneToOne(mappedBy = "stockMovement", cascade = CascadeType.ALL) //O que foi feito: numa relação de um para um, mete-se o mesmo id em ambas as classes (se uma é id 5, a outra também). Por isso, o cascade é obrigatório.
-	private InvoicedProduct invoicedProduct;
+//	@JsonIgnore
+//	@OneToOne(mappedBy = "stockMovement", cascade = CascadeType.ALL) //O que foi feito: numa relação de um para um, mete-se o mesmo id em ambas as classes (se uma é id 5, a outra também). Por isso, o cascade é obrigatório.
+//	private InvoicedProduct invoicedProduct;
 	
 	//Para entrada ou saída directas de stock
 	/**

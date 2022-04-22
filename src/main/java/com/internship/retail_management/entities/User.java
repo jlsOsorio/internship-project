@@ -134,7 +134,10 @@ public class User implements Serializable{
 	 * @param status
 	 */
 	public void setStatus(Status status) {
-		this.status = status.getCode();
+		if (status != null) 
+		{
+			this.status = status.getCode();
+		}
 	}
 
 	/**
