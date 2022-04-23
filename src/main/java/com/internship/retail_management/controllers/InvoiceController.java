@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.internship.retail_management.dto.InvoiceDTO;
 import com.internship.retail_management.dto.InvoiceInsertDTO;
 import com.internship.retail_management.entities.Invoice;
 import com.internship.retail_management.services.InvoiceService;
@@ -54,8 +55,8 @@ public class InvoiceController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Invoice> insert(@RequestBody InvoiceInsertDTO dto) {
-		Invoice obj = service.insert(dto);
+	public ResponseEntity<InvoiceDTO> insert(@RequestBody InvoiceInsertDTO dto) {
+		InvoiceDTO obj = service.insert(dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getInvoiceNumber()).toUri();
 		return ResponseEntity.created(uri).body(obj);
 

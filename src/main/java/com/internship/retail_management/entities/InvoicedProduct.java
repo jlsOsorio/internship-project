@@ -12,6 +12,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -54,6 +55,12 @@ public class InvoicedProduct implements Serializable{
 	@JoinColumn(name = "invoice_id")
 	private Invoice invoice;
 	
+	@Setter(AccessLevel.NONE)
+	private Double subTotalIva;
+
+	@Setter(AccessLevel.NONE)
+	private Double subTotalNoIva;
+	
 	/**
 	 * Constructor that creates a invoiced product.
 	 * @param id invoiced product's id
@@ -68,6 +75,9 @@ public class InvoicedProduct implements Serializable{
 		this.product = product;
 		this.invoice = invoice;
 		this.product.getInvoicedProducts().add(this);
+		setSubTotalNoIva();
+		setSubTotalIva();
+		
 		//setStockMovement();
 	}
 	
@@ -96,8 +106,8 @@ public class InvoicedProduct implements Serializable{
 	 * multiplying for the quantity of the product.
 	 * @return Sub total with IVA
 	 */
-	public Double getSubTotalIva() {
-		return quantity * (product.getGrossPrice() + product.getTaxedPrice());
+	public void setSubTotalIva() {
+		this.subTotalIva = quantity * (product.getGrossPrice() + product.getTaxedPrice());
 	}
 
 	/**
@@ -105,7 +115,7 @@ public class InvoicedProduct implements Serializable{
 	 * amount of said product. 
 	 * @return Sub total without IVA
 	 */
-	public Double getSubTotalNoIva() {
-		return quantity * (product.getGrossPrice());
+	public void setSubTotalNoIva() {
+		this.subTotalNoIva =  quantity * (product.getGrossPrice());
 	}
 }

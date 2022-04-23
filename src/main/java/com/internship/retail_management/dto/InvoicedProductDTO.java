@@ -1,9 +1,8 @@
 package com.internship.retail_management.dto;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.internship.retail_management.entities.InvoicedProduct;
 
-import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,20 +10,24 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class InvoicedProductDTO {
 
 	private Long id;
 	private Integer quantity;
-	private Long userId;
-	private Long cashRegisterId;
+	private Long productId;
+	private String productName;
+	private Integer ivaValue;
+	private Double subTotalNoIva;
+	private Double subTotalIva;
 	
-	@Setter(AccessLevel.NONE)
-	private Map<String,Integer> invoicedProducts = new HashMap<>();
-	
-//	public InvoicedProductDTO(TransactionType transaction, Long userId, Long cashRegisterId) {
-//		this.transaction = transaction;
-//		this.userId = userId;
-//		this.cashRegisterId = cashRegisterId;
-//	}
-	
+	public InvoicedProductDTO(InvoicedProduct entity) {
+		this.id = entity.getId();
+		this.quantity = entity.getQuantity();
+		this.productId = entity.getProduct().getId();
+		this.productName = entity.getProduct().getName();
+		this.ivaValue = entity.getProduct().getIvaValue().getValue().getCode();
+		this.subTotalNoIva = entity.getSubTotalNoIva();
+		this.subTotalIva = entity.getSubTotalIva();
+	}
 }

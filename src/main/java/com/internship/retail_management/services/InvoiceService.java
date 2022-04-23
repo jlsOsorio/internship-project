@@ -4,11 +4,14 @@ import java.time.Instant;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.internship.retail_management.dto.InvoiceDTO;
 import com.internship.retail_management.dto.InvoiceInsertDTO;
+import com.internship.retail_management.dto.InvoicedProductDTO;
 import com.internship.retail_management.dto.ProductDTO;
 import com.internship.retail_management.entities.Invoice;
 import com.internship.retail_management.entities.InvoicedProduct;
@@ -55,7 +58,7 @@ public class InvoiceService {
 
 	}
 
-	public Invoice insert(InvoiceInsertDTO dto) {
+	public InvoiceDTO insert(InvoiceInsertDTO dto) {
 		try {
 			// List<InvoicedProduct> list = new ArrayList<>();
 			Invoice obj = new Invoice();
@@ -70,15 +73,25 @@ public class InvoiceService {
 				invoicedProduct.setProduct(product);
 				invoicedProduct.setQuantity(dto.getInvoicedProducts().get(name));
 				invoicedProduct.setInvoice(obj);
+				invoicedProduct.setSubTotalNoIva();
+				invoicedProduct.setSubTotalIva();
 				obj.getInvoicedProducts().add(invoicedProduct);
+				
 				invoicedProductService.insert(invoicedProduct);				
 				
 				stockMovementService.insertInvoicedProduct(invoicedProduct);
 
 				
 			}
+			
+			obj.setTotalNoIva();
+			obj.setTotalIva();
+			repository.save(obj);
 
-			return obj;
+			InvoiceDTO invoiceDTO = new InvoiceDTO(obj);
+			invoiceDTO.getInvoicedProducts().addAll(obj.getInvoicedProducts().stream().map(invProd -> new InvoicedProductDTO(invProd)).collect(Collectors.toList()));
+			
+			return invoiceDTO;
 		} catch (IllegalArgumentException e) {
 			throw new ServiceException("Something went wrong!");
 		}
@@ -94,6 +107,7 @@ public class InvoiceService {
 		User user = userService.userFromUserDTO(userService.findById(dto.getUserId()));
 
 		obj.setUser(user);
+		
 	}
 
 }

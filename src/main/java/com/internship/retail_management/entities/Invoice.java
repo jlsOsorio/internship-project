@@ -52,6 +52,13 @@ public class Invoice implements Serializable {
 	@Setter(AccessLevel.NONE)
 	private Integer transaction;
 	
+	@Setter(AccessLevel.NONE)
+	private Double totalNoIva;
+	
+	@Setter(AccessLevel.NONE)
+	private Double totalIva;
+
+	
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -81,6 +88,8 @@ public class Invoice implements Serializable {
 		setTransaction(transaction);
 		this.user = user;
 		this.cashRegister = cashRegister;
+		setTotalNoIva();
+		setTotalIva();
 	}
 
 	/**
@@ -106,28 +115,28 @@ public class Invoice implements Serializable {
 	 * Calculates the sum of all products IVA and returns it.
 	 * @return Total of products IVA
 	 */
-	public Double getTotalIva() {
+	public void setTotalIva() {
 		Double sum = 0.0;
 		for (InvoicedProduct product : invoicedProducts)
 		{
 			sum += product.getSubTotalIva();
 		}
 		
-		return sum;
+		this.totalIva = sum;
 	}
 	
 	/**
 	 * Calculates the sum of all products without IVA.
 	 * @return Total of products without IVA
 	 */
-	public Double getTotalNoIva() {
+	public void setTotalNoIva() {
 		Double sum = 0.0;
 		for (InvoicedProduct product : invoicedProducts)
 		{
 			sum += product.getSubTotalNoIva();
 		}
 		
-		return sum;
+		this.totalNoIva = sum;
 	}
 	
 }
