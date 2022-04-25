@@ -17,14 +17,16 @@ public enum TransactionType {
 
 	/**
 	 * Sets the type of transaction.
+	 * 
 	 * @param code Transaction's type code
 	 */
 	private TransactionType(int code) {
-			this.code = code;
-		}
+		this.code = code;
+	}
 
 	/**
 	 * Retrieves the transaction type code.
+	 * 
 	 * @return
 	 */
 	public int getCode() {
@@ -33,6 +35,7 @@ public enum TransactionType {
 
 	/**
 	 * Gets transaction's code and returns type of said transaction.
+	 * 
 	 * @param code transaction's type code
 	 * @return value of the transaction
 	 * @throws IllegalArgumentException

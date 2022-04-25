@@ -20,7 +20,7 @@ public class InvoicedProductDTO {
 	private Integer ivaValue;
 	private Double subTotalNoIva;
 	private Double subTotalIva;
-	
+
 	public InvoicedProductDTO(InvoicedProduct entity) {
 		this.id = entity.getId();
 		this.quantity = entity.getQuantity();

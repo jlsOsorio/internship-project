@@ -19,9 +19,7 @@ import com.internship.retail_management.services.exceptions.DatabaseException;
 import com.internship.retail_management.services.exceptions.ResourceNotFoundException;
 import com.internship.retail_management.services.exceptions.ServiceException;
 
-@Service // regista a classe como componente do Spring para ele conhecer e ser
-			// automaticamente injectada (autowired). Existem também o Component e o
-			// Repository, para o mesmo fim
+@Service
 public class UserService {
 
 	@Autowired
@@ -73,12 +71,10 @@ public class UserService {
 		}
 
 	}
-	
+
 	public UserDTO update(Long id, UserInsertDTO obj) {
 		try {
-			User entity = repository.findById(id).get(); // o getOne (deprecated) prepara o objecto pelo JPA (é
-															// monitorizado). Desta forma, não há necessidade de ir
-															// buscar o objecto à base de dados.
+			User entity = repository.findById(id).get();
 
 			if (checkEmailNif(id, obj)) {
 				throw new ServiceException("There is already someone with inserted unique data (email or nif).");
@@ -105,6 +101,7 @@ public class UserService {
 
 	}
 
+	//auxiliary functions
 	public User userFromUserDTO(UserDTO obj) {
 		return repository.findById(obj.getId()).get();
 	}

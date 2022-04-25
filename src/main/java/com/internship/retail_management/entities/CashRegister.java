@@ -36,14 +36,14 @@ import lombok.Setter;
 @Entity
 @Table(name = "tb_cash_register")
 public class CashRegister implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
 	private Long id;
-	
+
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "store_id")
@@ -57,7 +57,7 @@ public class CashRegister implements Serializable {
 	/**
 	 * Constructor that creates a cash register.
 	 * 
-	 * @param id Cash register's id
+	 * @param id    Cash register's id
 	 * @param store Store's id
 	 */
 	public CashRegister(Long id, Store store) {
@@ -65,5 +65,5 @@ public class CashRegister implements Serializable {
 		this.id = id;
 		this.store = store;
 	}
-	
+
 }

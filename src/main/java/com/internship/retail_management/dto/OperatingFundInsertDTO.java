@@ -19,7 +19,7 @@ public class OperatingFundInsertDTO {
 	private Double exitQty;
 	private Long cashRegisterId;
 	private Instant moment;
-	
+
 	public OperatingFundInsertDTO(OperatingFund entity) {
 		this.entryQty = entity.getEntryQty();
 		this.exitQty = entity.getExitQty();

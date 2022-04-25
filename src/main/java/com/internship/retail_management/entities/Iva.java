@@ -30,30 +30,34 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @Entity
 @Table(name = "tb_iva")
-public class Iva implements Tax, Serializable{
+public class Iva implements Tax, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@EqualsAndHashCode.Include
 	private Long id;
-	
+
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
+	@EqualsAndHashCode.Include
 	private Integer value;
-	
+
 	@Setter(AccessLevel.NONE)
-	@JsonIgnore //para não estar em loop no momento do pedido (um order tem um user que tem varios orders que têm um pedido, ...)
+	@JsonIgnore // para não estar em loop no momento do pedido (um order tem um user que tem
+				// varios orders que têm um pedido, ...)
 	@OneToMany(mappedBy = "ivaValue")
 	List<Product> products = new ArrayList<>();
-	
+
 	/**
 	 * Constructor that creates a IVA entry.
-	 * @param id IVA's id
+	 * 
+	 * @param id    IVA's id
 	 * @param value IVA'S value
 	 */
 	public Iva(Long id, IvaValues value) {
@@ -61,9 +65,10 @@ public class Iva implements Tax, Serializable{
 		this.id = id;
 		setValue(value);
 	}
-	
+
 	/**
 	 * Gets IVA value.
+	 * 
 	 * @return value of IVA
 	 */
 	public IvaValues getValue() {
@@ -72,18 +77,19 @@ public class Iva implements Tax, Serializable{
 
 	/**
 	 * Sets IVA value.
+	 * 
 	 * @param value
 	 */
 	public void setValue(IvaValues value) {
-		if (value != null)
-		{
+		if (value != null) {
 			this.value = value.getCode();
 		}
 	}
-	
+
 	/**
 	 * Gets tax with the IVA value and divides it by 100 to get a double.
-	 * @return tax 
+	 * 
+	 * @return tax
 	 */
 	@Override
 	public Double getTax() {

@@ -12,12 +12,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductInsertDTO {
-	
+
 	private String name;
 	private Integer stock;
 	private Integer ivaValue;
 	private Double grossPrice;
-	
+
 	public ProductInsertDTO(Product entity) {
 		super();
 		this.name = entity.getName();

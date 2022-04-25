@@ -24,9 +24,7 @@ import com.internship.retail_management.services.exceptions.ResourceNotFoundExce
 import com.internship.retail_management.services.exceptions.ServiceException;
 import com.internship.retail_management.services.exceptions.StockException;
 
-@Service // regista a classe como componente do Spring para ele conhecer e ser
-			// automaticamente injectada (autowired). Existem também o Component e o
-			// Repository, para o mesmo fim
+@Service
 public class StockMovementService {
 
 	@Autowired
@@ -74,31 +72,24 @@ public class StockMovementService {
 
 			StockMovement obj = new StockMovement();
 			persistData(obj, dto);
-
-			ProductDTO stockProdDTO = productService.findById(productId);
-
-			Integer newStock = stockProdDTO.getStock();
-
+			
 			if (obj.getQuantity() <= 0) {
 				throw new StockException("Invalid quantity: " + obj.getQuantity());
 			}
+			
+			ProductDTO stockProdDTO = productService.findById(productId);
+			Product stockProd = productService.productFromProductDTO(stockProdDTO);
 
-			if (obj.getMovement() == Movement.IN) {
-				newStock += obj.getQuantity();
+			if (stockProd.getStock() - obj.getQuantity() < 0 && obj.getMovement() == Movement.OUT) {
+				throw new StockException("There is not enough quantity: Product stock: " + stockProd.getStock()
+						+ "; quantity required to sell: " + obj.getQuantity());
 			}
 
-			if (obj.getMovement() == Movement.OUT) {
-				if (newStock - obj.getQuantity() < 0) {
-					throw new StockException("There is not enough quantity: Product stock: " + newStock
-							+ "; quantity required to sell: " + obj.getQuantity());
-				}
-				newStock -= obj.getQuantity();
-			}
-
-			stockProdDTO.getStockMovements().add(obj);
+			stockProd.updateStock(dto.getQuantity(), dto.getMovement());
+			
 			StockMovement stockMovement = repository.save(obj);
 
-			productService.updateStock(productId, newStock);
+			productService.updateStock(productId, stockProd.getStock());
 
 			return stockMovement;
 		} catch (IllegalFormatException e) {
@@ -141,6 +132,7 @@ public class StockMovementService {
 		}
 	}
 
+	//auxiliary functions
 	private void persistData(StockMovement entity, StockMovementInsertDTO obj) {
 		entity.setQuantity(obj.getQuantity());
 		entity.setMovement(obj.getMovement());

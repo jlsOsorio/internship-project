@@ -20,6 +20,7 @@ import com.internship.retail_management.services.StockMovementService;
 
 /**
  * This class works as a controller for the stock movement.
+ * 
  * @author Bruno Soares
  * @author João Osório
  * @version 1.0
@@ -28,30 +29,24 @@ import com.internship.retail_management.services.StockMovementService;
 @RestController
 @RequestMapping(value = "/stockmovements")
 public class StockMovementController {
-	
-	//Injecção de dependência automática
+
 	@Autowired
 	private StockMovementService service;
-	
+
 	/**
 	 * Retrieves stock movement list.
+	 * 
 	 * @return response
 	 */
-	@GetMapping //método que responde sobre o método Get do HTTP
+	@GetMapping
 	public ResponseEntity<List<StockMovement>> findAll() {
-		List<StockMovement> list = service.findAll(); 
-		return ResponseEntity.ok().body(list); //retorna a resposta
+		List<StockMovement> list = service.findAll();
+		return ResponseEntity.ok().body(list); // retorna a resposta
 	}
-	
-	
-//	@GetMapping(value = "/{id}")
-//	public ResponseEntity<StockMovement> findById(@PathVariable Long id) {
-//		StockMovement obj = service.findById(id);
-//		return ResponseEntity.ok().body(obj);
-//	}
-		
+
 	/**
 	 * Retrieves stock movements from products.
+	 * 
 	 * @param id product's id
 	 * @return list of movements from a product
 	 */
@@ -61,22 +56,15 @@ public class StockMovementController {
 		return ResponseEntity.ok().body(list);
 	}
 
-//	@PostMapping
-//	public ResponseEntity<StockMovement> insert(@RequestBody StockMovementInsertDTO dto) {
-//		StockMovement obj = service.insert(dto);
-//		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-//		return ResponseEntity.created(uri).body(obj);
-//
-//	}
-
 	@PostMapping(value = "/{productId}")
-	public ResponseEntity<StockMovement> insertStock(@PathVariable Long productId, @RequestBody StockMovementInsertDTO dto) {
+	public ResponseEntity<StockMovement> insertStock(@PathVariable Long productId,
+			@RequestBody StockMovementInsertDTO dto) {
 		StockMovement obj = service.insertStock(productId, dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).body(obj);
 
 	}
-	
+
 //	@PutMapping(value = "/{id}")
 //	public ResponseEntity<StockMovement> update(@PathVariable Long id, @RequestBody StockMovementInsertDTO dto) {
 //		StockMovement obj = service.update(id, dto);

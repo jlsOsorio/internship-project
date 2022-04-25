@@ -21,6 +21,7 @@ import com.internship.retail_management.services.StoreService;
 
 /**
  * This class works as a controller for the store.
+ * 
  * @author Bruno Soares
  * @author João Osório
  * @version 1.0
@@ -29,23 +30,24 @@ import com.internship.retail_management.services.StoreService;
 @RestController
 @RequestMapping(value = "/stores")
 public class StoreController {
-	
-	//Injecção de dependência automática
+
 	@Autowired
 	private StoreService service;
-	
+
 	/**
 	 * Retrieves store list.
+	 * 
 	 * @return response
 	 */
-	@GetMapping //método que responde sobre o método Get do HTTP
+	@GetMapping
 	public ResponseEntity<List<Store>> findAll() {
-		List<Store> list = service.findAll(); 
-		return ResponseEntity.ok().body(list); //retorna a resposta
+		List<Store> list = service.findAll();
+		return ResponseEntity.ok().body(list); // retorna a resposta
 	}
-	
+
 	/**
 	 * Retrieves store by id.
+	 * 
 	 * @param id store's id
 	 * @return response
 	 */
@@ -62,7 +64,7 @@ public class StoreController {
 		return ResponseEntity.created(uri).body(obj);
 
 	}
-	
+
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<Store> update(@PathVariable Long id, @RequestBody StoreInsertDTO dto) {
 		Store obj = service.update(id, dto);

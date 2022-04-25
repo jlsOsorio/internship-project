@@ -13,6 +13,7 @@ import lombok.Setter;
 
 /**
  * Data transfer object class for inserting a user.
+ * 
  * @author Bruno Soares
  * @author João Osório
  * @version 1.0
@@ -24,22 +25,23 @@ import lombok.Setter;
  * Constructor with no arguments for the user insert DTO.
  */
 @NoArgsConstructor
+@AllArgsConstructor
 /**
  * Constructor for the user's insert DTO.
- * @param name user's name
- * @param email user's email
- * @param password user's password
- * @param phone user's phone number
+ * 
+ * @param name      user's name
+ * @param email     user's email
+ * @param password  user's password
+ * @param phone     user's phone number
  * @param birthDate user's birth date
- * @param nif user's tax identification number
- * @param category user's category
- * @param status user's status
- * @param address user's address
- * @param council user's council
- * @param zipCode user's zip code
- * @param store user's store
+ * @param nif       user's tax identification number
+ * @param category  user's category
+ * @param status    user's status
+ * @param address   user's address
+ * @param council   user's council
+ * @param zipCode   user's zip code
+ * @param store     user's store
  */
-@AllArgsConstructor
 public class UserInsertDTO {
 
 	private String name;
@@ -54,9 +56,10 @@ public class UserInsertDTO {
 	private String council;
 	private String zipCode;
 	private Long storeId;
-	
+
 	/**
 	 * Retrieves user's insert.
+	 * 
 	 * @param entity
 	 */
 	public UserInsertDTO(User entity) {

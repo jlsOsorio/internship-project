@@ -14,17 +14,19 @@ public enum Category {
 	EMPLOYEE(0), SUPERVISOR(1);
 
 	private int code;
-	
+
 	/**
 	 * Sets category.
+	 * 
 	 * @param code category's code.
 	 */
 	private Category(int code) {
-			this.code = code;
-		}
+		this.code = code;
+	}
 
 	/**
 	 * Retrieves the category code.
+	 * 
 	 * @return
 	 */
 	public int getCode() {
@@ -33,6 +35,7 @@ public enum Category {
 
 	/**
 	 * Gets category's code and returns the value of said category.
+	 * 
 	 * @param code Category's code
 	 * @return value of the category
 	 * @throws IllegalArgumentException

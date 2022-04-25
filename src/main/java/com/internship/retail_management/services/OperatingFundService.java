@@ -5,6 +5,8 @@ import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -20,9 +22,7 @@ import com.internship.retail_management.services.exceptions.DateException;
 import com.internship.retail_management.services.exceptions.ResourceNotFoundException;
 import com.internship.retail_management.services.exceptions.ServiceException;
 
-@Service // regista a classe como componente do Spring para ele conhecer e ser
-			// automaticamente injectada (autowired). Existem também o Component e o
-			// Repository, para o mesmo fim
+@Service
 public class OperatingFundService {
 
 	@Autowired
@@ -30,7 +30,7 @@ public class OperatingFundService {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private CashRegisterService cashRegisterService;
 
@@ -48,6 +48,7 @@ public class OperatingFundService {
 		}
 	}
 
+	@Transactional
 	public OperatingFund insert(Long userId, OperatingFundInsertDTO dto) {
 		try {
 
@@ -70,7 +71,7 @@ public class OperatingFundService {
 			return repository.save(obj);
 		} catch (IllegalFormatException e) {
 			throw new ServiceException("Something went wrong!");
-		} catch  (DataIntegrityViolationException e) {
+		} catch (DataIntegrityViolationException e) {
 			throw new DatabaseException(e.getMessage());
 		}
 
@@ -81,33 +82,25 @@ public class OperatingFundService {
 			if (obj.getMoment().isAfter(Instant.now())) {
 				throw new DateException("The inserted date must be before actual date.");
 			}
-			
-			OperatingFund entity = repository.findById(id).get(); // o getOne (deprecated e, por isso, não usado) prepara o objecto pelo JPA (é
-															// monitorizado). Desta forma, não há necessidade de ir
-															// buscar o objecto à base de dados.
 
+			OperatingFund entity = repository.findById(id).get();
 
 			persistData(entity, obj);
-			
-			
 
 			repository.save(entity);
 
 			return entity;
 		} catch (NoSuchElementException e) {
-			if (repository.findById(id).isEmpty())
-			{
+			if (repository.findById(id).isEmpty()) {
 				throw new ResourceNotFoundException(id);
-			}
-			else
-			{
+			} else {
 				throw new ResourceNotFoundException(obj.getCashRegisterId());
 			}
-		} catch  (DataIntegrityViolationException e) {
+		} catch (DataIntegrityViolationException e) {
 			throw new DatabaseException(e.getMessage());
 		}
 	}
-	
+
 	public void delete(Long id) {
 		try {
 			repository.deleteById(id);
@@ -118,7 +111,8 @@ public class OperatingFundService {
 		}
 
 	}
-	
+
+	//auxiliary functions
 	private void persistData(OperatingFund obj, OperatingFundInsertDTO dto) {
 		obj.setEntryQty(dto.getEntryQty());
 		obj.setExitQty(dto.getExitQty());

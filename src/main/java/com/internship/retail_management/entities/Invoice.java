@@ -37,38 +37,37 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "tb_invoice")
-@SequenceGenerator(name="seqInvNumber", initialValue=100000)
+@SequenceGenerator(name = "seqInvNumber", initialValue = 100000)
 public class Invoice implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="seqInvNumber")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqInvNumber")
 	@EqualsAndHashCode.Include
 	private Long invoiceNumber;
-	
+
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
 	private Instant date;
-	
+
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private Integer transaction;
-	
+
 	@Setter(AccessLevel.NONE)
 	private Double totalNoIva;
-	
+
 	@Setter(AccessLevel.NONE)
 	private Double totalIva;
 
-	
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "cash_register_id")
 	private CashRegister cashRegister;
-	
+
 	@Setter(AccessLevel.NONE)
 	@OneToMany(mappedBy = "invoice")
 	List<InvoicedProduct> invoicedProducts = new ArrayList<>();
@@ -77,10 +76,10 @@ public class Invoice implements Serializable {
 	 * Constructor that creates a invoice.
 	 * 
 	 * @param invoiceNumber invoice's id
-	 * @param date invoice's date
-	 * @param transaction invoice's transaction
-	 * @param user user's id
-	 * @param cashRegister cash register's id
+	 * @param date          invoice's date
+	 * @param transaction   invoice's transaction
+	 * @param user          user's id
+	 * @param cashRegister  cash register's id
 	 */
 	public Invoice(Long invoiceNumber, Instant date, TransactionType transaction, User user,
 			CashRegister cashRegister) {
@@ -96,6 +95,7 @@ public class Invoice implements Serializable {
 
 	/**
 	 * Gets a transaction.
+	 * 
 	 * @return transaction
 	 */
 	public TransactionType getTransaction() {
@@ -104,41 +104,41 @@ public class Invoice implements Serializable {
 
 	/**
 	 * Sets transaction.
+	 * 
 	 * @param transaction transaction type
 	 */
 	public void setTransaction(TransactionType transaction) {
-		if (transaction != null)
-		{
+		if (transaction != null) {
 			this.transaction = transaction.getCode();
 		}
 	}
-	
+
 	/**
 	 * Calculates the sum of all products IVA and returns it.
+	 * 
 	 * @return Total of products IVA
 	 */
 	public void setTotalIva() {
 		Double sum = 0.0;
-		for (InvoicedProduct product : invoicedProducts)
-		{
+		for (InvoicedProduct product : invoicedProducts) {
 			sum += product.getSubTotalIva();
 		}
-		
+
 		this.totalIva = sum;
 	}
-	
+
 	/**
 	 * Calculates the sum of all products without IVA.
+	 * 
 	 * @return Total of products without IVA
 	 */
 	public void setTotalNoIva() {
 		Double sum = 0.0;
-		for (InvoicedProduct product : invoicedProducts)
-		{
+		for (InvoicedProduct product : invoicedProducts) {
 			sum += product.getSubTotalNoIva();
 		}
-		
+
 		this.totalNoIva = sum;
 	}
-	
+
 }

@@ -45,11 +45,6 @@ public class InvoicedProduct implements Serializable {
 	@JoinColumn(name = "product_id")
 	private Product product;
 
-//	@Setter(AccessLevel.NONE)
-//	@OneToOne
-//	@MapsId //Na classe dependente
-//	private StockMovement stockMovement;
-
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "invoice_id")
@@ -78,31 +73,8 @@ public class InvoicedProduct implements Serializable {
 		this.product.getInvoicedProducts().add(this);
 		setSubTotalNoIva();
 		setSubTotalIva();
-
-		// setStockMovement();
 	}
 
-	/**
-	 * Sets stock movement based on the transaction type. Adds it to the invoiced
-	 * products list.
-	 * 
-	 */
-//	public void setStockMovement() {
-//		if (invoice.getTransaction() == TransactionType.DEBIT)
-//		{
-//			//this.stockMovement = new StockMovement(null, quantity, Movement.OUT, product);
-//			product.getInvoicedProducts().add(this);
-//		}
-//		
-//		if (invoice.getTransaction() == TransactionType.CREDIT)
-//		{
-//			//this.stockMovement = new StockMovement(null, quantity, Movement.IN, product);
-//			product.getInvoicedProducts().add(this);
-//		}
-//	}
-
-	// Necessário meter o "get" para que o valor seja mostrado na execução do
-	// controlador (particularidade do Java EE)
 	/**
 	 * Calculates the IVA sub total by adding the product's gross price and the
 	 * taxed price and multiplying for the quantity of the product.

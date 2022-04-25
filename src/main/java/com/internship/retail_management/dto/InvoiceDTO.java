@@ -22,20 +22,20 @@ public class InvoiceDTO {
 	private TransactionType transaction;
 	private UserInvoiceDTO user;
 	private CashRegister cashRegister;
-	
+
 	@Setter(AccessLevel.NONE)
 	List<InvoicedProductDTO> invoicedProducts = new ArrayList<>();
 	private Double totalNoIva;
 	private Double totalIva;
-	
-	
-	public InvoiceDTO(Long invoiceNumber, TransactionType transaction, UserInvoiceDTO userInvoiceDTO, CashRegister cashRegister) {
+
+	public InvoiceDTO(Long invoiceNumber, TransactionType transaction, UserInvoiceDTO userInvoiceDTO,
+			CashRegister cashRegister) {
 		this.invoiceNumber = invoiceNumber;
 		this.transaction = transaction;
 		this.user = userInvoiceDTO;
 		this.cashRegister = cashRegister;
 	}
-	
+
 	public InvoiceDTO(Invoice entity) {
 		UserInvoiceDTO userInvoiceDTO = new UserInvoiceDTO(entity.getUser());
 		this.invoiceNumber = entity.getInvoiceNumber();
@@ -44,6 +44,7 @@ public class InvoiceDTO {
 		this.cashRegister = entity.getCashRegister();
 		this.totalNoIva = entity.getTotalNoIva();
 		this.totalIva = entity.getTotalIva();
-		this.invoicedProducts.addAll(entity.getInvoicedProducts().stream().map(invoicedProduct -> new InvoicedProductDTO(invoicedProduct)).collect(Collectors.toList()));
+		this.invoicedProducts.addAll(entity.getInvoicedProducts().stream()
+				.map(invoicedProduct -> new InvoicedProductDTO(invoicedProduct)).collect(Collectors.toList()));
 	}
 }

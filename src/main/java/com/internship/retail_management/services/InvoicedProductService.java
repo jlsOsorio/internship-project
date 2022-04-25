@@ -1,34 +1,42 @@
 package com.internship.retail_management.services;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.internship.retail_management.dto.InvoicedProductDTO;
 import com.internship.retail_management.entities.InvoicedProduct;
 import com.internship.retail_management.repositories.InvoicedProductRepository;
+import com.internship.retail_management.services.exceptions.ResourceNotFoundException;
 import com.internship.retail_management.services.exceptions.ServiceException;
 import com.internship.retail_management.services.exceptions.StockException;
 
-@Service // regista a classe como componente do Spring para ele conhecer e ser
-			// automaticamente injectada (autowired). Existem também o Component e o
-			// Repository, para o mesmo fim
+@Service
 public class InvoicedProductService {
 
 	@Autowired
 	private InvoicedProductRepository repository;
-	
+
 	@Autowired
 	private StockMovementService stockMovementService;
 
-	public List<InvoicedProduct> findAll() {
-		return repository.findAll();
+	public List<InvoicedProductDTO> findAll() {
+		List<InvoicedProduct> list = repository.findAll();
+		return list.stream().map(invoicedProduct -> new InvoicedProductDTO(invoicedProduct))
+				.collect(Collectors.toList());
 	}
 
-	public InvoicedProduct findById(Long id) {
-		Optional<InvoicedProduct> obj = repository.findById(id);
-		return obj.get();
+	public InvoicedProductDTO findById(Long id) {
+		try {
+			Optional<InvoicedProduct> obj = repository.findById(id);
+			return new InvoicedProductDTO(obj.get());
+		} catch (NoSuchElementException e) {
+			throw new ResourceNotFoundException(id);
+		}
 	}
 
 	public void insert(InvoicedProduct obj) {
@@ -44,14 +52,5 @@ public class InvoicedProductService {
 			throw new ServiceException("Something went wrong!");
 		}
 	}
-
-//	private void persistInvoice(Invoice obj, InvoicedProductDTO dto) {
-//		obj.setDate(Instant.now());
-//		obj.setTransaction(dto.getTransaction());
-//		obj.setCashRegister(cashRegisterService.findById(dto.getCashRegisterId()));
-//		
-//		UserDTO user = userService.findById(dto.getUserId());
-//		obj.setUser(userService.userFromUserDTO(user));
-//	}
 
 }

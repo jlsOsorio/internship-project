@@ -23,6 +23,7 @@ import com.internship.retail_management.services.ProductService;
 
 /**
  * This class works as a controller for the product.
+ * 
  * @author Bruno Soares
  * @author João Osório
  * @version 1.0
@@ -31,25 +32,25 @@ import com.internship.retail_management.services.ProductService;
 @RestController
 @RequestMapping(value = "/products")
 public class ProductController {
-	
-	//Injecção de dependência automática
+
 	@Autowired
 	private ProductService service;
-	
-	
+
 	/**
 	 * Retrieves product list.
+	 * 
 	 * @return response
 	 */
 
-	@GetMapping //método que responde sobre o método Get do HTTP
+	@GetMapping
 	public ResponseEntity<List<ProductDTO>> findAll() {
-		List<ProductDTO> list = service.findAll(); 
-		return ResponseEntity.ok().body(list); //retorna a resposta
+		List<ProductDTO> list = service.findAll();
+		return ResponseEntity.ok().body(list); // retorna a resposta
 	}
-	
+
 	/**
 	 * Retrieves product by id.
+	 * 
 	 * @param id product's id
 	 * @return response
 	 */
@@ -58,16 +59,20 @@ public class ProductController {
 		ProductDTO obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
-	
+
 	/**
 	 * Inserts a new product in the list.
+	 * 
 	 * @param obj product
 	 * @return response
 	 */
-	@PostMapping //RequestBody permite que, no momento da requisição, esta possa ser feita em JSON, e devolver o objecto, desserializando-o
+	@PostMapping // RequestBody permite que, no momento da requisição, esta possa ser feita em
+					// JSON, e devolver o objecto, desserializando-o
 	public ResponseEntity<ProductDTO> insert(@RequestBody ProductInsertDTO dto) {
 		ProductDTO obj = service.insert(dto);
-		//URI vai servir para que, no momento da criação do objecto em JSON (código 201), exista no cabeçalho uma location com o endereço que retorna esse mesmo objecto.
+		// URI vai servir para que, no momento da criação do objecto em JSON (código
+		// 201), exista no cabeçalho uma location com o endereço que retorna esse mesmo
+		// objecto.
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		Product newProd = new Product();
 		newProd.setId(obj.getId());
@@ -75,24 +80,24 @@ public class ProductController {
 		newProd.setStock(obj.getStock());
 		newProd.setIvaValue(service.getIva(obj.getIvaValue()));
 		newProd.setGrossPrice(obj.getGrossPrice());
-		//newProd.setTaxedPrice(service.getIva(obj.getIvaValue()));
+		// newProd.setTaxedPrice(service.getIva(obj.getIvaValue()));
 //		newProd.getStockMovements().add(new StockMovement(null, newProd.getStock(), Movement.IN, newProd));
 //		smService.insert(newProd.getStockMovements().get(0));
 		return ResponseEntity.created(uri).body(obj);
 	}
-	
+
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductUpdateDTO dto) {
 		ProductDTO obj = service.update(id, dto);
 		return ResponseEntity.ok().body(obj);
 
 	}
-	
+
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 
 	}
-	
+
 }

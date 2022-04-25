@@ -22,10 +22,10 @@ public class ProductDTO {
 	private Integer ivaValue;
 	private Double grossPrice;
 	private Double taxedPrice;
-	
+
 	@Setter(AccessLevel.NONE)
 	List<StockMovement> stockMovements = new ArrayList<>();
-	
+
 	public ProductDTO(Long id, String name, Integer stock, Integer ivaValue, Double grossPrice) {
 		this.id = id;
 		this.name = name;
@@ -34,7 +34,7 @@ public class ProductDTO {
 		this.grossPrice = grossPrice;
 		this.taxedPrice = grossPrice * this.ivaValue;
 	}
-	
+
 	public ProductDTO(Product entity) {
 		this.id = entity.getId();
 		this.name = entity.getName();
@@ -44,5 +44,5 @@ public class ProductDTO {
 		this.taxedPrice = entity.getTaxedPrice();
 		this.stockMovements.addAll(entity.getStockMovements());
 	}
-	
+
 }

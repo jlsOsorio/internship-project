@@ -17,14 +17,16 @@ public enum Status {
 
 	/**
 	 * Sets the values for the status.
+	 * 
 	 * @param code status's code
 	 */
 	private Status(int code) {
-			this.code = code;
-		}
+		this.code = code;
+	}
 
 	/**
 	 * Retrieves the status's code.
+	 * 
 	 * @return
 	 */
 	public int getCode() {
@@ -33,6 +35,7 @@ public enum Status {
 
 	/**
 	 * Gets status's code and returns value of said status.
+	 * 
 	 * @param code status values's code
 	 * @return value of the status
 	 * @throws IllegalArgumentException

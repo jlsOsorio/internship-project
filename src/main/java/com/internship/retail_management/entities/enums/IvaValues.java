@@ -9,23 +9,22 @@ package com.internship.retail_management.entities.enums;
  */
 public enum IvaValues {
 
-	NULL(0),
-	LOW(6),
-	INTERMEDIATE(13),
-	NORMAL(23);
-	
+	NULL(0), LOW(6), INTERMEDIATE(13), NORMAL(23);
+
 	private int code;
-	
+
 	/**
 	 * Sets IVA value.
+	 * 
 	 * @param code IVA value's code.
 	 */
 	private IvaValues(int code) {
-			this.code = code;
-		}
+		this.code = code;
+	}
 
 	/**
 	 * Retrieves the IVA values's code.
+	 * 
 	 * @return
 	 */
 	public int getCode() {
@@ -34,6 +33,7 @@ public enum IvaValues {
 
 	/**
 	 * Gets IVA's code and returns value of said IVA.
+	 * 
 	 * @param code IVA value's code
 	 * @return value of the IVA
 	 * @throws IllegalArgumentException

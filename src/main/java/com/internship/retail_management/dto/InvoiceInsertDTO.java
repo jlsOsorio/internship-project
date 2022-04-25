@@ -19,16 +19,16 @@ public class InvoiceInsertDTO {
 	private TransactionType transaction;
 	private Long userId;
 	private Long cashRegisterId;
-	
+
 	@Setter(AccessLevel.NONE)
 	private Map<String, Integer> invoicedProducts = new HashMap<>();
-	
+
 	public InvoiceInsertDTO(TransactionType transaction, Long userId, Long cashRegisterId) {
 		this.transaction = transaction;
 		this.userId = userId;
 		this.cashRegisterId = cashRegisterId;
 	}
-	
+
 	public InvoiceInsertDTO(Invoice entity) {
 		this.transaction = entity.getTransaction();
 		this.userId = entity.getUser().getId();

@@ -6,6 +6,8 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -24,9 +26,7 @@ import com.internship.retail_management.services.exceptions.ResourceNotFoundExce
 import com.internship.retail_management.services.exceptions.ServiceException;
 import com.internship.retail_management.services.exceptions.StockException;
 
-@Service // regista a classe como componente do Spring para ele conhecer e ser
-			// automaticamente injectada (autowired). Existem também o Component e o
-			// Repository, para o mesmo fim
+@Service
 public class ProductService {
 
 	@Autowired
@@ -37,9 +37,6 @@ public class ProductService {
 
 	@Autowired
 	private StockMovementService smService;
-
-//	@Autowired
-//	private ProductRepository smRepository;
 
 	public List<ProductDTO> findAll() {
 		List<Product> list = repository.findAll();
@@ -55,7 +52,7 @@ public class ProductService {
 			throw new ResourceNotFoundException(id);
 		}
 	}
-	
+
 	public ProductDTO findByName(String name) {
 		try {
 			Product obj = repository.findByName(name);
@@ -65,15 +62,15 @@ public class ProductService {
 		}
 	}
 
+	@Transactional
 	public ProductDTO insert(ProductInsertDTO dto) {
 		try {
 			Product product = repository.findByName(dto.getName());
-			
-			if (product != null)
-			{
+
+			if (product != null) {
 				throw new ServiceException("This product already exists");
 			}
-			
+
 			if (dto.getStock() < 0) {
 				throw new StockException("Invalid quantity: " + dto.getStock());
 			}
@@ -81,15 +78,13 @@ public class ProductService {
 			Product obj = new Product();
 			persistData(obj, dto);
 
-			
-			
 			obj.getStockMovements().add(new StockMovement(null, obj.getStock(), Movement.IN, obj));
-			
+
 			obj = repository.save(obj);
-		
+
 			StockMovement stockMovement = obj.getStockMovements().get(0);
 			smService.insert(stockMovement);
-			
+
 			return new ProductDTO(obj);
 		} catch (IllegalFormatException e) {
 			throw new ServiceException("Something went wrong!");
@@ -99,11 +94,11 @@ public class ProductService {
 
 	public ProductDTO update(Long id, ProductUpdateDTO obj) {
 		try {
-			Product entity = repository.findById(id).get(); // o getOne (deprecated e, por isso, não usado) prepara o objecto pelo JPA (é
+			Product entity = repository.findById(id).get(); // o getOne (deprecated e, por isso, não usado) prepara o
+															// objecto pelo JPA (é
 															// monitorizado). Desta forma, não há necessidade de ir
 															// buscar o objecto à base de dados.
-			if (checkName(id, obj))
-			{
+			if (checkName(id, obj)) {
 				throw new ServiceException("There is already someone with inserted unique data (name).");
 			}
 
@@ -116,7 +111,7 @@ public class ProductService {
 			throw new ResourceNotFoundException(id);
 		}
 	}
-	
+
 	public void delete(Long id) {
 		try {
 			repository.deleteById(id);
@@ -127,19 +122,19 @@ public class ProductService {
 		}
 
 	}
-	
+
+	@Transactional
 	public void updateStock(Long id, Integer stock) {
 		Product stockProd = repository.findById(id).get();
 		stockProd.setStock(stock);
 
 		StockMovement stockMovement = smService.findAll().get(smService.findAll().size() - 1);
 		stockMovement.setProduct(stockProd);
-		//stockProd.getStockMovements().add(stockMovement);
-		
-		
+
 		repository.save(stockProd);
 	}
 
+	//auxiliary functions
 	public Iva getIva(Integer value) {
 		List<Iva> list = ivaService.findAll();
 
@@ -152,49 +147,41 @@ public class ProductService {
 		throw new ServiceException("There is no IVA with that value!");
 
 	}
-	
+
 	public Product productFromProductDTO(ProductDTO obj) {
 		return repository.findById(obj.getId()).get();
-//		Iva iva = getIva(obj.getIvaValue());
-//		
-//		entity.setId(obj.getId());
-//		entity.setName(obj.getName());
-//		entity.setIvaValue(iva);
-//		entity.setStock(obj.getStock());
-//		entity.setGrossPrice(obj.getGrossPrice());
-//		entity.setTaxedPrice(iva);
 	}
-	
+
 	public void persistData(Product entity, ProductInsertDTO obj) {
 		Iva iva = getIva(obj.getIvaValue());
-		
+
 		entity.setName(obj.getName());
 		entity.setIvaValue(iva);
 		entity.setStock(obj.getStock());
 		entity.setGrossPrice(obj.getGrossPrice());
 		entity.setTaxedPrice(iva);
 	}
-	
+
 	private void updateData(Product entity, ProductUpdateDTO obj) {
 		Iva iva = getIva(obj.getIvaValue());
-		
+
 		entity.setName(obj.getName());
 		entity.setIvaValue(iva);
 		entity.setGrossPrice(obj.getGrossPrice());
 		entity.setTaxedPrice(iva);
 	}
-	
+
 	public void updateStockDTO(Product entity, ProductDTO obj) {
 		entity.setStock(obj.getStock());
 	}
-	
+
 	public boolean checkName(Long id, ProductUpdateDTO obj) {
 		List<Product> products = repository.findAll();
-		//Deve poder alterar o seu próprio nome, por isso, este não pode contar para comparação
+		// Deve poder alterar o seu próprio nome, por isso, este não pode contar para
+		// comparação
 		products.removeIf(product -> product.getId() == id);
 
-		for (Product entity : products)
-		{
+		for (Product entity : products) {
 			if (entity.getName().equals(obj.getName())) {
 				return true;
 			}

@@ -35,33 +35,29 @@ import lombok.Setter;
 public class StockMovement implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
 	private Long id;
 	private Integer quantity;
-	
+
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private Integer movement;
-	
+
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
-	
-//	@JsonIgnore
-//	@OneToOne(mappedBy = "stockMovement", cascade = CascadeType.ALL) //O que foi feito: numa relação de um para um, mete-se o mesmo id em ambas as classes (se uma é id 5, a outra também). Por isso, o cascade é obrigatório.
-//	private InvoicedProduct invoicedProduct;
-	
-	//Para entrada ou saída directas de stock
+
 	/**
 	 * Constructor for stock movements.
-	 * @param id stock movement's id
+	 * 
+	 * @param id       stock movement's id
 	 * @param quantity quantity of the product
 	 * @param movement type of stock movement either IN or OUT
-	 * @param product product's id
+	 * @param product  product's id
 	 */
 	public StockMovement(Long id, Integer quantity, Movement movement, Product product) {
 		super();
@@ -70,8 +66,10 @@ public class StockMovement implements Serializable {
 		setMovement(movement);
 		this.product = product;
 	}
+
 	/**
 	 * Retrieves a movement.
+	 * 
 	 * @return
 	 */
 	public Movement getMovement() {
@@ -80,11 +78,11 @@ public class StockMovement implements Serializable {
 
 	/**
 	 * Sets movement.
+	 * 
 	 * @param movement
 	 */
 	public void setMovement(Movement movement) {
-		if (movement != null)
-		{
+		if (movement != null) {
 			this.movement = movement.getCode();
 		}
 	}

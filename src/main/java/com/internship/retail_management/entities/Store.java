@@ -33,10 +33,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "tb_store")
-public class Store implements Serializable{
+public class Store implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
@@ -45,28 +45,29 @@ public class Store implements Serializable{
 	private String council;
 	private String zipCode;
 	private String contact;
-	
+
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private Integer status;
-	
+
 	@Setter(AccessLevel.NONE)
 	@OneToMany(mappedBy = "store")
 	private List<CashRegister> cashRegisters = new ArrayList<>();
-	
+
 	@JsonIgnore
 	@Setter(AccessLevel.NONE)
 	@OneToMany(mappedBy = "store")
 	private List<User> users = new ArrayList<>();
-	
+
 	/**
 	 * Constructor that creates a store.
-	 * @param id Store's id
+	 * 
+	 * @param id      Store's id
 	 * @param address Store's address
 	 * @param council Store's council
 	 * @param zipCode Store's zip code
 	 * @param contact Store's contact
-	 * @param status Store's current status
+	 * @param status  Store's current status
 	 */
 	public Store(Long id, String address, String council, String zipCode, String contact, Status status) {
 		this.id = id;
@@ -76,9 +77,10 @@ public class Store implements Serializable{
 		this.contact = contact;
 		setStatus(status);
 	}
-	
+
 	/**
 	 * Retrieves the store's current status.
+	 * 
 	 * @return
 	 */
 	public Status getStatus() {
@@ -87,13 +89,13 @@ public class Store implements Serializable{
 
 	/**
 	 * Sets the store's current status.
+	 * 
 	 * @param status
 	 */
 	public void setStatus(Status status) {
-		if (status != null)
-		{
+		if (status != null) {
 			this.status = status.getCode();
 		}
 	}
-	
+
 }

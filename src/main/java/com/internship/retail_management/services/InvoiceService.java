@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.internship.retail_management.dto.InvoiceDTO;
@@ -20,12 +22,11 @@ import com.internship.retail_management.entities.InvoicedProduct;
 import com.internship.retail_management.entities.Product;
 import com.internship.retail_management.entities.User;
 import com.internship.retail_management.repositories.InvoiceRepository;
+import com.internship.retail_management.services.exceptions.DatabaseException;
 import com.internship.retail_management.services.exceptions.ResourceNotFoundException;
 import com.internship.retail_management.services.exceptions.ServiceException;
 
-@Service // regista a classe como componente do Spring para ele conhecer e ser
-			// automaticamente injectada (autowired). Existem também o Component e o
-			// Repository, para o mesmo fim
+@Service
 public class InvoiceService {
 
 	@Autowired
@@ -43,8 +44,6 @@ public class InvoiceService {
 	@Autowired
 	private InvoicedProductService invoicedProductService;
 
-
-
 	public List<InvoiceDTO> findAll() {
 		List<Invoice> list = repository.findAll();
 		return list.stream().map(invoice -> new InvoiceDTO(invoice)).collect(Collectors.toList());
@@ -60,12 +59,13 @@ public class InvoiceService {
 
 	}
 
-	@Transactional
+	@Transactional // rollback total se acontecer algum erro em qualquer uma das comunicações com a
+					// base de dados
 	public InvoiceDTO insert(InvoiceInsertDTO dto) {
 		try {
-			// List<InvoicedProduct> list = new ArrayList<>();
 			Invoice obj = new Invoice();
 			persistData(obj, dto);
+
 			obj = repository.save(obj);
 
 			for (String name : dto.getInvoicedProducts().keySet()) {
@@ -81,7 +81,6 @@ public class InvoiceService {
 				obj.getInvoicedProducts().add(invoicedProduct);
 
 				invoicedProductService.insert(invoicedProduct);
-
 
 			}
 
@@ -112,13 +111,41 @@ public class InvoiceService {
 		}
 	}
 
+	public void delete(Long id) {
+		try {
+			repository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseException(e.getMessage());
+		}
+	}
+
+	// auxiliary functions
 	private void persistData(Invoice obj, InvoiceInsertDTO dto) {
+
+		User user = userService.userFromUserDTO(userService.findById(dto.getUserId()));
+
+		/////////////////// VERIFICAR SE CAIXA PERTENCE À LOJA ONDE ESTÁ O UTILIZADOR
+		/////////////////// ///////////////////
+		Boolean flag = false;
+
+		Integer cashRegistersNumber = user.getStore().getCashRegisters().size();
+
+		for (int i = 0; i < cashRegistersNumber; i++) {
+			if (dto.getCashRegisterId() == user.getStore().getCashRegisters().get(i).getId()) {
+				flag = true;
+			}
+		}
+
+		if (flag == false) {
+			throw new ServiceException("The cash register doesn't belong to the store where the employee belongs.");
+		}
+		///////////////////////////////////////////////////////////////////////////////////////////////
 
 		obj.setDate(Instant.now());
 		obj.setTransaction(dto.getTransaction());
 		obj.setCashRegister(cashRegisterService.findById(dto.getCashRegisterId()));
-
-		User user = userService.userFromUserDTO(userService.findById(dto.getUserId()));
 
 		obj.setUser(user);
 

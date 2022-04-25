@@ -21,6 +21,7 @@ import com.internship.retail_management.services.OperatingFundService;
 
 /**
  * This class works as a controller for the operating fund.
+ * 
  * @author Bruno Soares
  * @author João Osório
  * @version 1.0
@@ -29,34 +30,36 @@ import com.internship.retail_management.services.OperatingFundService;
 @RestController
 @RequestMapping(value = "/operatingfunds")
 public class OperatingFundController {
-	
-	//Injecção de dependência automática
+
 	@Autowired
 	private OperatingFundService service;
-	
+
 	/**
 	 * Retrieves operating fund list.
-	 * @return all operating funds 
+	 * 
+	 * @return all operating funds
 	 */
-	@GetMapping //método que responde sobre o método Get do HTTP
+	@GetMapping
 	public ResponseEntity<List<OperatingFund>> findAll() {
-		List<OperatingFund> list = service.findAll(); 
-		return ResponseEntity.ok().body(list); //retorna a resposta
+		List<OperatingFund> list = service.findAll();
+		return ResponseEntity.ok().body(list); // retorna a resposta
 	}
-	
+
 	/**
 	 * Retrieves list of operating funds from a user.
+	 * 
 	 * @param id user's id
 	 * @return all operating funds from the user
 	 */
-	@GetMapping(value = "/{userId}") 
+	@GetMapping(value = "/{userId}")
 	public ResponseEntity<List<OperatingFund>> findByUser(@PathVariable Long userId) {
-		List<OperatingFund> list = service.findByUser(userId); 
-		return ResponseEntity.ok().body(list); //retorna a resposta
+		List<OperatingFund> list = service.findByUser(userId);
+		return ResponseEntity.ok().body(list); // retorna a resposta
 	}
-	
+
 	/**
 	 * Creates an operating fund from a user.
+	 * 
 	 * @param id user's id
 	 * @return response of the created operating fund
 	 */
@@ -73,7 +76,7 @@ public class OperatingFundController {
 		return ResponseEntity.ok().body(obj);
 
 	}
-	
+
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		service.delete(id);

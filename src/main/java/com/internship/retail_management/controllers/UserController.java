@@ -31,7 +31,6 @@ import com.internship.retail_management.services.UserService;
 @RequestMapping(value = "/users")
 public class UserController {
 
-	// Injecção de dependência automática
 	@Autowired
 	private UserService service;
 
@@ -40,7 +39,7 @@ public class UserController {
 	 * 
 	 * @return response
 	 */
-	@GetMapping // método que responde sobre o método Get do HTTP
+	@GetMapping
 	public ResponseEntity<List<UserDTO>> findAll() {
 		List<UserDTO> list = service.findAll();
 		return ResponseEntity.ok().body(list); // retorna a resposta

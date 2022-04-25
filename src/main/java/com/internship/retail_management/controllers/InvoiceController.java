@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,7 +32,6 @@ import com.internship.retail_management.services.InvoiceService;
 @RequestMapping(value = "/invoices")
 public class InvoiceController {
 
-	// Injecção de dependência automática
 	@Autowired
 	private InvoiceService service;
 
@@ -40,7 +40,7 @@ public class InvoiceController {
 	 * 
 	 * @return response
 	 */
-	@GetMapping // método que responde sobre o método Get do HTTP
+	@GetMapping
 	public ResponseEntity<List<InvoiceDTO>> findAll() {
 		List<InvoiceDTO> list = service.findAll();
 		return ResponseEntity.ok().body(list); // retorna a resposta
@@ -71,6 +71,13 @@ public class InvoiceController {
 	public ResponseEntity<InvoiceDTO> update(@PathVariable Long invoiceNumber, @RequestBody InvoiceUpdateDTO dto) {
 		InvoiceDTO obj = service.update(invoiceNumber, dto);
 		return ResponseEntity.ok().body(obj);
+
+	}
+
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
+		service.delete(id);
+		return ResponseEntity.noContent().build();
 
 	}
 

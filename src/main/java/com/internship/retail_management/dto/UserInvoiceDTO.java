@@ -16,7 +16,7 @@ public class UserInvoiceDTO {
 	private Long id;
 	private String name;
 	private Long nif;
-	
+
 	public UserInvoiceDTO(User entity) {
 		this.id = entity.getId();
 		this.name = entity.getName();

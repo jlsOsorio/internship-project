@@ -1,6 +1,6 @@
 package com.internship.retail_management.services.exceptions;
 
-public class DateException extends RuntimeException{
+public class DateException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

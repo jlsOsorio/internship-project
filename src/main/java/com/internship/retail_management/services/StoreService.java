@@ -20,9 +20,7 @@ import com.internship.retail_management.services.exceptions.DatabaseException;
 import com.internship.retail_management.services.exceptions.ResourceNotFoundException;
 import com.internship.retail_management.services.exceptions.ServiceException;
 
-@Service // regista a classe como componente do Spring para ele conhecer e ser
-			// automaticamente injectada (autowired). Existem também o Component e o
-			// Repository, para o mesmo fim
+@Service
 public class StoreService {
 
 	@Autowired
@@ -71,10 +69,7 @@ public class StoreService {
 	@Transactional
 	public Store update(Long id, StoreInsertDTO obj) {
 		try {
-			Store entity = repository.findById(id).get(); // o getOne (deprecated e, por isso, não usado) prepara o
-															// objecto pelo JPA (é
-															// monitorizado). Desta forma, não há necessidade de ir
-															// buscar o objecto à base de dados.
+			Store entity = repository.findById(id).get();
 
 			persistData(entity, obj);
 			int diffNumberCR = Math.abs(obj.getNumberCashRegisters() - entity.getCashRegisters().size());
@@ -91,12 +86,12 @@ public class StoreService {
 				}
 			}
 
-			
-
 			return repository.save(entity);
 
 		} catch (NoSuchElementException e) {
 			throw new ResourceNotFoundException(id);
+		} catch (IllegalFormatException e) {
+			throw new ServiceException("Something went wrong!");
 		}
 	}
 

@@ -10,19 +10,21 @@ package com.internship.retail_management.entities.enums;
 public enum Movement {
 
 	IN(0), OUT(1);
-	
+
 	private int code;
 
 	/**
 	 * Sets movement.
+	 * 
 	 * @param code movement's code
 	 */
 	private Movement(int code) {
-			this.code = code;
-		}
+		this.code = code;
+	}
 
 	/**
 	 * Retrieves the movement's code.
+	 * 
 	 * @return
 	 */
 	public int getCode() {
@@ -31,6 +33,7 @@ public enum Movement {
 
 	/**
 	 * Gets movement's code and returns type of said movement.
+	 * 
 	 * @param code movement type's code
 	 * @return value of the movement
 	 * @throws IllegalArgumentException

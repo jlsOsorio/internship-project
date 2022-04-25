@@ -34,10 +34,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "tb_operating_fund")
-public class OperatingFund implements Serializable{
+public class OperatingFund implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
@@ -53,13 +53,13 @@ public class OperatingFund implements Serializable{
 	 * Operating fund's exit quantity.
 	 */
 	private Double exitQty;
-	
+
 	/**
 	 * Operating fund's time stamp.
 	 */
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
 	private Instant moment;
-	
+
 	/**
 	 * Operating fund's associated user id.
 	 */
@@ -67,12 +67,12 @@ public class OperatingFund implements Serializable{
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
-	
+
 	/**
 	 * Operating fund associated cash register id.
 	 */
 	@ManyToOne
 	@JoinColumn(name = "cash_register_id")
 	private CashRegister cashRegister;
-	
+
 }
