@@ -73,18 +73,7 @@ public class UserService {
 		}
 
 	}
-
-	public void delete(Long id) {
-		try {
-			repository.deleteById(id);
-		} catch (EmptyResultDataAccessException e) {
-			throw new ResourceNotFoundException(id);
-		} catch (DataIntegrityViolationException e) {
-			throw new DatabaseException(e.getMessage());
-		}
-
-	}
-
+	
 	public UserDTO update(Long id, UserInsertDTO obj) {
 		try {
 			User entity = repository.findById(id).get(); // o getOne (deprecated) prepara o objecto pelo JPA (é
@@ -103,6 +92,17 @@ public class UserService {
 		} catch (NoSuchElementException e) {
 			throw new ResourceNotFoundException(id);
 		}
+	}
+
+	public void delete(Long id) {
+		try {
+			repository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseException(e.getMessage());
+		}
+
 	}
 
 	public User userFromUserDTO(UserDTO obj) {

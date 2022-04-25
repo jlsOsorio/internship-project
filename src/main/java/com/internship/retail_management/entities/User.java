@@ -40,47 +40,47 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "tb_user")
-public class User implements Serializable{
+public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
 	private Long id;
 	private String name;
-	
+
 	@EqualsAndHashCode.Include
 	private String email;
 	private String password;
 	private String phone;
-	
+
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
 	private Instant birthDate;
-	
+
 	@EqualsAndHashCode.Include
 	private Long nif;
-	
+
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private Integer category;
-	
+
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private Integer status;
-	
+
 	private String address;
 	private String council;
 	private String zipCode;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "store_id")
 	private Store store;
-	
+
 	@Setter(AccessLevel.NONE)
 	@OneToMany(mappedBy = "user")
 	List<OperatingFund> operatingFunds = new ArrayList<>();
-	
+
 	@JsonIgnore
 	@Setter(AccessLevel.NONE)
 	@OneToMany(mappedBy = "user")
@@ -89,19 +89,19 @@ public class User implements Serializable{
 	/**
 	 * Constructor that creates a user.
 	 * 
-	 * @param id User's id
-	 * @param name User's name
-	 * @param email User's email
-	 * @param password User's password
-	 * @param phone User's phone number
+	 * @param id        User's id
+	 * @param name      User's name
+	 * @param email     User's email
+	 * @param password  User's password
+	 * @param phone     User's phone number
 	 * @param birthDate User's birth date
-	 * @param nif User's tax identification number
-	 * @param category User's category either EMPLOYEE or SUPERVISOR
-	 * @param status User's status either ACTIVE or INACTIVE
-	 * @param address User's address
-	 * @param council User's council
-	 * @param zipCode User's zip code
-	 * @param store User's store id
+	 * @param nif       User's tax identification number
+	 * @param category  User's category either EMPLOYEE or SUPERVISOR
+	 * @param status    User's status either ACTIVE or INACTIVE
+	 * @param address   User's address
+	 * @param council   User's council
+	 * @param zipCode   User's zip code
+	 * @param store     User's store id
 	 */
 	public User(Long id, String name, String email, String password, String phone, Instant birthDate, Long nif,
 			Category category, Status status, String address, String council, String zipCode, Store store) {
@@ -123,6 +123,7 @@ public class User implements Serializable{
 
 	/**
 	 * Retrieves the status for the user.
+	 * 
 	 * @return
 	 */
 	public Status getStatus() {
@@ -131,17 +132,18 @@ public class User implements Serializable{
 
 	/**
 	 * Sets the status for the user.
+	 * 
 	 * @param status
 	 */
 	public void setStatus(Status status) {
-		if (status != null) 
-		{
+		if (status != null) {
 			this.status = status.getCode();
 		}
 	}
 
 	/**
 	 * Retrieves the category for the user.
+	 * 
 	 * @return
 	 */
 	public Category getCategory() {
@@ -150,15 +152,13 @@ public class User implements Serializable{
 
 	/**
 	 * Sets the category for the user.
+	 * 
 	 * @param category
 	 */
 	public void setCategory(Category category) {
-		if (category != null)
-		{
+		if (category != null) {
 			this.category = category.getCode();
 		}
 	}
-	
-	
-	
+
 }

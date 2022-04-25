@@ -6,12 +6,14 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.internship.retail_management.dto.InvoiceDTO;
 import com.internship.retail_management.dto.InvoiceInsertDTO;
-import com.internship.retail_management.dto.InvoicedProductDTO;
+import com.internship.retail_management.dto.InvoiceUpdateDTO;
 import com.internship.retail_management.dto.ProductDTO;
 import com.internship.retail_management.entities.Invoice;
 import com.internship.retail_management.entities.InvoicedProduct;
@@ -41,23 +43,24 @@ public class InvoiceService {
 	@Autowired
 	private InvoicedProductService invoicedProductService;
 
-	@Autowired
-	private StockMovementService stockMovementService;
 
-	public List<Invoice> findAll() {
-		return repository.findAll();
+
+	public List<InvoiceDTO> findAll() {
+		List<Invoice> list = repository.findAll();
+		return list.stream().map(invoice -> new InvoiceDTO(invoice)).collect(Collectors.toList());
 	}
 
-	public Invoice findById(Long id) {
+	public InvoiceDTO findById(Long id) {
 		try {
 			Optional<Invoice> obj = repository.findById(id);
-			return obj.get();
+			return new InvoiceDTO(obj.get());
 		} catch (NoSuchElementException e) {
 			throw new ResourceNotFoundException(id);
 		}
 
 	}
 
+	@Transactional
 	public InvoiceDTO insert(InvoiceInsertDTO dto) {
 		try {
 			// List<InvoicedProduct> list = new ArrayList<>();
@@ -76,26 +79,37 @@ public class InvoiceService {
 				invoicedProduct.setSubTotalNoIva();
 				invoicedProduct.setSubTotalIva();
 				obj.getInvoicedProducts().add(invoicedProduct);
-				
-				invoicedProductService.insert(invoicedProduct);				
-				
-				stockMovementService.insertInvoicedProduct(invoicedProduct);
 
-				
+				invoicedProductService.insert(invoicedProduct);
+
+
 			}
-			
+
 			obj.setTotalNoIva();
 			obj.setTotalIva();
 			repository.save(obj);
 
 			InvoiceDTO invoiceDTO = new InvoiceDTO(obj);
-			invoiceDTO.getInvoicedProducts().addAll(obj.getInvoicedProducts().stream().map(invProd -> new InvoicedProductDTO(invProd)).collect(Collectors.toList()));
-			
+
 			return invoiceDTO;
 		} catch (IllegalArgumentException e) {
 			throw new ServiceException("Something went wrong!");
 		}
 
+	}
+
+	public InvoiceDTO update(Long invoiceNumber, InvoiceUpdateDTO obj) {
+		try {
+			Invoice entity = repository.findById(invoiceNumber).get();
+
+			updateData(entity, obj);
+
+			repository.save(entity);
+
+			return new InvoiceDTO(entity);
+		} catch (NoSuchElementException e) {
+			throw new ResourceNotFoundException(invoiceNumber);
+		}
 	}
 
 	private void persistData(Invoice obj, InvoiceInsertDTO dto) {
@@ -107,7 +121,18 @@ public class InvoiceService {
 		User user = userService.userFromUserDTO(userService.findById(dto.getUserId()));
 
 		obj.setUser(user);
-		
+
+	}
+
+	private void updateData(Invoice obj, InvoiceUpdateDTO dto) {
+
+		obj.setDate(Instant.now());
+		obj.setCashRegister(cashRegisterService.findById(dto.getCashRegisterId()));
+
+		User user = userService.userFromUserDTO(userService.findById(dto.getUserId()));
+
+		obj.setUser(user);
+
 	}
 
 }

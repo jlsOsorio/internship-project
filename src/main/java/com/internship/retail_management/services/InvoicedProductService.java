@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.internship.retail_management.entities.InvoicedProduct;
 import com.internship.retail_management.repositories.InvoicedProductRepository;
 import com.internship.retail_management.services.exceptions.ServiceException;
+import com.internship.retail_management.services.exceptions.StockException;
 
 @Service // regista a classe como componente do Spring para ele conhecer e ser
 			// automaticamente injectada (autowired). Existem também o Component e o
@@ -17,6 +18,9 @@ public class InvoicedProductService {
 
 	@Autowired
 	private InvoicedProductRepository repository;
+	
+	@Autowired
+	private StockMovementService stockMovementService;
 
 	public List<InvoicedProduct> findAll() {
 		return repository.findAll();
@@ -27,12 +31,15 @@ public class InvoicedProductService {
 		return obj.get();
 	}
 
-	public InvoicedProduct insert(InvoicedProduct obj) {
+	public void insert(InvoicedProduct obj) {
 		try {
 			if (obj.getQuantity() <= 0) {
-				throw new ServiceException("The quantity of the movement must be a positive number.");
+				throw new StockException("Invalid quantity: " + obj.getQuantity());
 			}
-			return repository.save(obj);
+			obj.getProduct().getInvoicedProducts().add(obj);
+			stockMovementService.insertInvoicedProduct(obj);
+
+			repository.save(obj);
 		} catch (IllegalArgumentException e) {
 			throw new ServiceException("Something went wrong!");
 		}

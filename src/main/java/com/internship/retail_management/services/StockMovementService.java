@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -20,6 +22,7 @@ import com.internship.retail_management.repositories.StockMovementRepository;
 import com.internship.retail_management.services.exceptions.DatabaseException;
 import com.internship.retail_management.services.exceptions.ResourceNotFoundException;
 import com.internship.retail_management.services.exceptions.ServiceException;
+import com.internship.retail_management.services.exceptions.StockException;
 
 @Service // regista a classe como componente do Spring para ele conhecer e ser
 			// automaticamente injectada (autowired). Existem também o Component e o
@@ -65,6 +68,7 @@ public class StockMovementService {
 
 	}
 
+	@Transactional
 	public StockMovement insertStock(Long productId, StockMovementInsertDTO dto) {
 		try {
 
@@ -76,7 +80,7 @@ public class StockMovementService {
 			Integer newStock = stockProdDTO.getStock();
 
 			if (obj.getQuantity() <= 0) {
-				throw new ServiceException("The quantity of the movement must be a positive number.");
+				throw new StockException("Invalid quantity: " + obj.getQuantity());
 			}
 
 			if (obj.getMovement() == Movement.IN) {
@@ -84,6 +88,10 @@ public class StockMovementService {
 			}
 
 			if (obj.getMovement() == Movement.OUT) {
+				if (newStock - obj.getQuantity() < 0) {
+					throw new StockException("There is not enough quantity: Product stock: " + newStock
+							+ "; quantity required to sell: " + obj.getQuantity());
+				}
 				newStock -= obj.getQuantity();
 			}
 
@@ -98,52 +106,30 @@ public class StockMovementService {
 		}
 
 	}
-	
+
+	@Transactional
 	public void insertInvoicedProduct(InvoicedProduct obj) {
 		try {
 
+			if (obj.getProduct().getStock() - obj.getQuantity() < 0) {
+				throw new StockException("There is not enough quantity: Product stock: " + obj.getProduct().getStock()
+						+ "; quantity required to sell: " + obj.getQuantity());
+			}
+
 			obj.getProduct().updateInvoicedStock();
-			
-			StockMovement stockMovement = obj.getProduct().getStockMovements().get(obj.getProduct().getStockMovements().size() - 1);
-			
-//			persistData(obj, dto);
-//
-//			ProductDTO productDTO = productService.findById(productId);
-//			Product product = productService.productFromProductDTO(productDTO);
-//			
-//			if (obj.getQuantity() <= 0) {
-//				throw new ServiceException("The quantity of the movement must be a positive number.");
-//			}
-//
-//			product.updateInvoicedStock();
-//
+
+			StockMovement stockMovement = obj.getProduct().getStockMovements()
+					.get(obj.getProduct().getStockMovements().size() - 1);
+
 			repository.save(stockMovement);
 
 			productService.updateStock(obj.getProduct().getId(), obj.getProduct().getStock());
 
-			
 		} catch (IllegalFormatException e) {
 			throw new ServiceException("Something went wrong!");
 		}
 
 	}
-
-//	public StockMovement update(Long id, StockMovementInsertDTO obj) {
-//		try {
-//			StockMovement entity = repository.findById(id).get(); // o getOne (deprecated e, por isso, não usado)
-//																	// prepara o objecto pelo JPA (é
-//			// monitorizado). Desta forma, não há necessidade de ir
-//			// buscar o objecto à base de dados.
-//
-//			persistData(entity, obj);
-//
-//			repository.save(entity);
-//
-//			return entity;
-//		} catch (NoSuchElementException e) {
-//			throw new ResourceNotFoundException(id);
-//		}
-//	}
 
 	public void delete(Long id) {
 		try {

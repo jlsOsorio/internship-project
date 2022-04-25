@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -42,6 +44,7 @@ public class StoreService {
 		}
 	}
 
+	@Transactional
 	public Store insert(StoreInsertDTO store) {
 		try {
 			if (store.getNumberCashRegisters() <= 0) {
@@ -65,6 +68,7 @@ public class StoreService {
 		}
 	}
 
+	@Transactional
 	public Store update(Long id, StoreInsertDTO obj) {
 		try {
 			Store entity = repository.findById(id).get(); // o getOne (deprecated e, por isso, não usado) prepara o

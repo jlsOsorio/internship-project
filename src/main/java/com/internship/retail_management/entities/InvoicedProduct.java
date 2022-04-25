@@ -31,42 +31,43 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "tb_invoiced_product")
-public class InvoicedProduct implements Serializable{
+public class InvoicedProduct implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
 	private Long id;
 	private Integer quantity;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
-	
+
 //	@Setter(AccessLevel.NONE)
 //	@OneToOne
 //	@MapsId //Na classe dependente
 //	private StockMovement stockMovement;
-	
+
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "invoice_id")
 	private Invoice invoice;
-	
+
 	@Setter(AccessLevel.NONE)
 	private Double subTotalIva;
 
 	@Setter(AccessLevel.NONE)
 	private Double subTotalNoIva;
-	
+
 	/**
 	 * Constructor that creates a invoiced product.
-	 * @param id invoiced product's id
+	 * 
+	 * @param id       invoiced product's id
 	 * @param quantity product's quantity
-	 * @param product product's id
-	 * @param invoice invoice's id
+	 * @param product  product's id
+	 * @param invoice  invoice's id
 	 */
 	public InvoicedProduct(Long id, Integer quantity, Product product, Invoice invoice) {
 		super();
@@ -77,13 +78,13 @@ public class InvoicedProduct implements Serializable{
 		this.product.getInvoicedProducts().add(this);
 		setSubTotalNoIva();
 		setSubTotalIva();
-		
-		//setStockMovement();
+
+		// setStockMovement();
 	}
-	
+
 	/**
-	 * Sets stock movement based on the transaction type.
-	 * Adds it to the invoiced products list.
+	 * Sets stock movement based on the transaction type. Adds it to the invoiced
+	 * products list.
 	 * 
 	 */
 //	public void setStockMovement() {
@@ -99,11 +100,13 @@ public class InvoicedProduct implements Serializable{
 //			product.getInvoicedProducts().add(this);
 //		}
 //	}
-	
-	//Necessário meter o "get" para que o valor seja mostrado na execução do controlador (particularidade do Java EE)
+
+	// Necessário meter o "get" para que o valor seja mostrado na execução do
+	// controlador (particularidade do Java EE)
 	/**
-	 * Calculates the IVA sub total by adding the product's gross price and the taxed price and
-	 * multiplying for the quantity of the product.
+	 * Calculates the IVA sub total by adding the product's gross price and the
+	 * taxed price and multiplying for the quantity of the product.
+	 * 
 	 * @return Sub total with IVA
 	 */
 	public void setSubTotalIva() {
@@ -111,11 +114,12 @@ public class InvoicedProduct implements Serializable{
 	}
 
 	/**
-	 * Calculates the sub total without IVA by multiplying the product's gross price with the
-	 * amount of said product. 
+	 * Calculates the sub total without IVA by multiplying the product's gross price
+	 * with the amount of said product.
+	 * 
 	 * @return Sub total without IVA
 	 */
 	public void setSubTotalNoIva() {
-		this.subTotalNoIva =  quantity * (product.getGrossPrice());
+		this.subTotalNoIva = quantity * (product.getGrossPrice());
 	}
 }

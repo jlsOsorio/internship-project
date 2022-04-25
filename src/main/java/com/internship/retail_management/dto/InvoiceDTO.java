@@ -2,6 +2,7 @@ package com.internship.retail_management.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.internship.retail_management.entities.CashRegister;
 import com.internship.retail_management.entities.Invoice;
@@ -43,5 +44,6 @@ public class InvoiceDTO {
 		this.cashRegister = entity.getCashRegister();
 		this.totalNoIva = entity.getTotalNoIva();
 		this.totalIva = entity.getTotalIva();
+		this.invoicedProducts.addAll(entity.getInvoicedProducts().stream().map(invoicedProduct -> new InvoicedProductDTO(invoicedProduct)).collect(Collectors.toList()));
 	}
 }

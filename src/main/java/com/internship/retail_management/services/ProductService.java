@@ -75,7 +75,7 @@ public class ProductService {
 			}
 			
 			if (dto.getStock() < 0) {
-				throw new StockException(dto.getStock());
+				throw new StockException("Invalid quantity: " + dto.getStock());
 			}
 
 			Product obj = new Product();
