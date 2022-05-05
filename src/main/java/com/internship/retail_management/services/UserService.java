@@ -11,6 +11,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.internship.retail_management.dto.ChangePasswordDTO;
 import com.internship.retail_management.dto.UserDTO;
 import com.internship.retail_management.dto.UserInsertDTO;
 import com.internship.retail_management.entities.User;
@@ -89,6 +90,16 @@ public class UserService {
 			throw new ResourceNotFoundException(id);
 		}
 	}
+	
+	public UserDTO changePassword(Long id, ChangePasswordDTO obj) {
+		User entity = repository.findById(id).get();
+
+		persistPassword(entity, obj);
+		
+		repository.save(entity);
+		
+		return new UserDTO(entity);
+	}
 
 	public void delete(Long id) {
 		try {
@@ -109,7 +120,6 @@ public class UserService {
 	private void persistData(User entity, UserInsertDTO obj) {
 		entity.setName(obj.getName());
 		entity.setEmail(obj.getEmail());
-		entity.setPassword(passwordEncoder.encode(obj.getPassword()));
 		entity.setPhone(obj.getPhone());
 		entity.setBirthDate(obj.getBirthDate());
 		entity.setNif(obj.getNif());
@@ -119,6 +129,10 @@ public class UserService {
 		entity.setCouncil(obj.getCouncil());
 		entity.setZipCode(obj.getZipCode());
 		entity.setStore(storeService.findById(obj.getStoreId()));
+	}
+	
+	private void persistPassword(User entity, ChangePasswordDTO obj) {
+		entity.setPassword(passwordEncoder.encode(obj.getPassword()));
 	}
 
 	public boolean checkEmailNif(Long id, UserInsertDTO obj) {

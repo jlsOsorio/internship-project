@@ -18,6 +18,7 @@ import com.internship.retail_management.entities.InvoicedProduct;
 import com.internship.retail_management.entities.Product;
 import com.internship.retail_management.entities.StockMovement;
 import com.internship.retail_management.entities.enums.Movement;
+import com.internship.retail_management.entities.enums.TransactionType;
 import com.internship.retail_management.repositories.StockMovementRepository;
 import com.internship.retail_management.services.exceptions.DatabaseException;
 import com.internship.retail_management.services.exceptions.ResourceNotFoundException;
@@ -102,7 +103,7 @@ public class StockMovementService {
 	public void insertInvoicedProduct(InvoicedProduct obj) {
 		try {
 
-			if (obj.getProduct().getStock() - obj.getQuantity() < 0) {
+			if (obj.getProduct().getStock() - obj.getQuantity() < 0 && obj.getProduct().getInvoicedProducts().get((obj.getProduct().getInvoicedProducts().size() - 1)).getInvoice().getTransaction() == TransactionType.DEBIT) {
 				throw new StockException("There is not enough quantity: Product stock: " + obj.getProduct().getStock()
 						+ "; quantity required to sell: " + obj.getQuantity());
 			}

@@ -47,7 +47,6 @@ public class UserInsertDTO {
 	private String name;
 	private String email;
 	private String phone;
-	private String password;
 	private Instant birthDate;
 	private Long nif;
 	private Category category;
@@ -66,7 +65,6 @@ public class UserInsertDTO {
 		super();
 		this.name = entity.getName();
 		this.email = entity.getEmail();
-		this.password = entity.getPassword();
 		this.phone = entity.getPhone();
 		this.birthDate = entity.getBirthDate();
 		this.nif = entity.getNif();
