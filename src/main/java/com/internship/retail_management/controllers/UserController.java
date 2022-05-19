@@ -19,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.internship.retail_management.dto.ChangePasswordDTO;
 import com.internship.retail_management.dto.UserDTO;
 import com.internship.retail_management.dto.UserInsertDTO;
+import com.internship.retail_management.dto.UserUpdateDTO;
 import com.internship.retail_management.services.UserService;
 
 /**
@@ -82,7 +83,7 @@ public class UserController {
 	 * @return
 	 */
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody UserInsertDTO dto) {
+	public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody UserUpdateDTO dto) {
 		UserDTO obj = service.update(id, dto);
 		return ResponseEntity.ok().body(obj);
 

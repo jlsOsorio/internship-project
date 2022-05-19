@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.internship.retail_management.dto.ChangePasswordDTO;
 import com.internship.retail_management.dto.UserDTO;
 import com.internship.retail_management.dto.UserInsertDTO;
+import com.internship.retail_management.dto.UserUpdateDTO;
 import com.internship.retail_management.entities.User;
 import com.internship.retail_management.repositories.UserRepository;
 import com.internship.retail_management.services.exceptions.DatabaseException;
@@ -65,7 +66,7 @@ public class UserService {
 			persistData(obj, dto);
 
 			obj = repository.save(obj);
-
+		
 			return new UserDTO(obj);
 		} catch (IllegalArgumentException e) {
 			throw new ServiceException("Something went wrong!");
@@ -73,7 +74,7 @@ public class UserService {
 
 	}
 
-	public UserDTO update(Long id, UserInsertDTO obj) {
+	public UserDTO update(Long id, UserUpdateDTO obj) {
 		try {
 			User entity = repository.findById(id).get();
 
@@ -81,7 +82,7 @@ public class UserService {
 				throw new ServiceException("There is already someone with inserted unique data (email or nif).");
 			}
 
-			persistData(entity, obj);
+			persistDataUpdate(entity, obj);
 
 			repository.save(entity);
 
@@ -120,6 +121,21 @@ public class UserService {
 	private void persistData(User entity, UserInsertDTO obj) {
 		entity.setName(obj.getName());
 		entity.setEmail(obj.getEmail());
+		entity.setPassword(passwordEncoder.encode(obj.getPassword()));
+		entity.setPhone(obj.getPhone());
+		entity.setBirthDate(obj.getBirthDate());
+		entity.setNif(obj.getNif());
+		entity.setCategory(obj.getCategory());
+		entity.setStatus(obj.getStatus());
+		entity.setAddress(obj.getAddress());
+		entity.setCouncil(obj.getCouncil());
+		entity.setZipCode(obj.getZipCode());
+		entity.setStore(storeService.findById(obj.getStoreId()));
+	}
+	
+	private void persistDataUpdate(User entity, UserUpdateDTO obj) {
+		entity.setName(obj.getName());
+		entity.setEmail(obj.getEmail());
 		entity.setPhone(obj.getPhone());
 		entity.setBirthDate(obj.getBirthDate());
 		entity.setNif(obj.getNif());
@@ -135,7 +151,7 @@ public class UserService {
 		entity.setPassword(passwordEncoder.encode(obj.getPassword()));
 	}
 
-	public boolean checkEmailNif(Long id, UserInsertDTO obj) {
+	public boolean checkEmailNif(Long id, UserUpdateDTO obj) {
 		List<User> users = repository.findAll();
 		// Deve poder alterar o seu próprio email ou nif, por isso, estes não podem
 		// contar para comparação

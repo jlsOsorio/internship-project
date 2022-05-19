@@ -29,7 +29,6 @@ import lombok.Setter;
 /**
  * Constructor for the user DTO.
  * 
- * @param id        user's id
  * @param name      user's name
  * @param email     user's email
  * @param phone     user's phone number
@@ -42,9 +41,8 @@ import lombok.Setter;
  * @param zipCode   user's zip code
  * @param storeUserDTO     user's store (with specific attributes)
  */
-public class UserDTO {
+public class UserUpdateDTO {
 
-	private Long id;
 	private String name;
 	private String email;
 	private String phone;
@@ -55,16 +53,14 @@ public class UserDTO {
 	private String address;
 	private String council;
 	private String zipCode;
-	private StoreUserDTO store;
-
+	private Long storeId;
+	
 	/**
 	 * Retrieves user.
 	 * 
 	 * @param entity
 	 */
-	public UserDTO(User entity) {
-		StoreUserDTO userDTO = new StoreUserDTO(entity.getStore());
-		this.id = entity.getId();
+	public UserUpdateDTO(User entity) {
 		this.name = entity.getName();
 		this.email = entity.getEmail();
 		this.phone = entity.getPhone();
@@ -75,6 +71,6 @@ public class UserDTO {
 		this.address = entity.getAddress();
 		this.council = entity.getCouncil();
 		this.zipCode = entity.getZipCode();
-		this.store = userDTO;
+		this.storeId = entity.getStore().getId();
 	}
 }

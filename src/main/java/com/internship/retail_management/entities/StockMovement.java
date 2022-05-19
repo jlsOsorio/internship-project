@@ -1,6 +1,7 @@
 package com.internship.retail_management.entities;
 
 import java.io.Serializable;
+import java.time.Instant;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.internship.retail_management.entities.enums.Movement;
 
@@ -41,6 +43,9 @@ public class StockMovement implements Serializable {
 	@EqualsAndHashCode.Include
 	private Long id;
 	private Integer quantity;
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
+	private Instant createdAt;
 
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
@@ -65,6 +70,7 @@ public class StockMovement implements Serializable {
 		this.quantity = quantity;
 		setMovement(movement);
 		this.product = product;
+		this.createdAt = Instant.now();
 	}
 
 	/**

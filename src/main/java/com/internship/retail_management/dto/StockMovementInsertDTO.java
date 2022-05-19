@@ -19,7 +19,7 @@ public class StockMovementInsertDTO {
 
 	public StockMovementInsertDTO(StockMovement entity) {
 		this.quantity = entity.getQuantity();
-		this.movement = entity.getMovement();
+		this.movement = entity.getMovement();		
 	}
 
 }

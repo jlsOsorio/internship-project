@@ -34,7 +34,7 @@ import lombok.Setter;
  * @param password  user's password
  * @param phone     user's phone number
  * @param birthDate user's birth date
- * @param nif       user's tax identification number
+ * @param nif       user's identification number
  * @param category  user's category
  * @param status    user's status
  * @param address   user's address
@@ -46,6 +46,7 @@ public class UserInsertDTO {
 
 	private String name;
 	private String email;
+	private String password;
 	private String phone;
 	private Instant birthDate;
 	private Long nif;
@@ -62,9 +63,9 @@ public class UserInsertDTO {
 	 * @param entity
 	 */
 	public UserInsertDTO(User entity) {
-		super();
 		this.name = entity.getName();
 		this.email = entity.getEmail();
+		this.password = entity.getPassword();
 		this.phone = entity.getPhone();
 		this.birthDate = entity.getBirthDate();
 		this.nif = entity.getNif();

@@ -1,5 +1,6 @@
 package com.internship.retail_management.services;
 
+import java.time.Instant;
 import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -137,6 +138,7 @@ public class StockMovementService {
 	private void persistData(StockMovement entity, StockMovementInsertDTO obj) {
 		entity.setQuantity(obj.getQuantity());
 		entity.setMovement(obj.getMovement());
+		entity.setCreatedAt(Instant.now());
 	}
 
 }
