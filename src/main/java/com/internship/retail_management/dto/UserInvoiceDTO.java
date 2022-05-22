@@ -16,10 +16,13 @@ public class UserInvoiceDTO {
 	private Long id;
 	private String name;
 	private Long nif;
+	private StoreUserDTO store;
 
 	public UserInvoiceDTO(User entity) {
+		StoreUserDTO userStoreDTO = new StoreUserDTO(entity.getStore());
 		this.id = entity.getId();
 		this.name = entity.getName();
 		this.nif = entity.getNif();
+		this.store = userStoreDTO;
 	}
 }

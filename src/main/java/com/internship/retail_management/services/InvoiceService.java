@@ -63,6 +63,11 @@ public class InvoiceService {
 					// base de dados
 	public InvoiceDTO insert(InvoiceInsertDTO dto) {
 		try {
+			if (dto.getInvoicedProducts().isEmpty())
+			{
+				throw new ServiceException("There should be products in the bill.");
+			}
+			
 			Invoice obj = new Invoice();
 			persistData(obj, dto);
 
@@ -79,7 +84,7 @@ public class InvoiceService {
 				invoicedProduct.setSubTotalNoIva();
 				invoicedProduct.setSubTotalIva();
 				obj.getInvoicedProducts().add(invoicedProduct);
-
+				
 				invoicedProductService.insert(invoicedProduct);
 
 			}

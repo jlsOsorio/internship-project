@@ -52,7 +52,7 @@ public class InvoiceController {
 	 * @param id invoice's id
 	 * @return response
 	 */
-	@GetMapping(value = "/{id}")
+	@GetMapping(value = "/{invoiceNumber}")
 	public ResponseEntity<InvoiceDTO> findById(@PathVariable Long invoiceNumber) {
 		InvoiceDTO obj = service.findById(invoiceNumber);
 		return ResponseEntity.ok().body(obj);

@@ -59,6 +59,18 @@ public class ProductController {
 		ProductDTO obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
+	
+	/**
+	 * Retrieves product by id.
+	 * 
+	 * @param id product's id
+	 * @return response
+	 */
+	@GetMapping(value = "/product/{name}")
+	public ResponseEntity<ProductDTO> findByName(@PathVariable String name) {
+		ProductDTO obj = service.findByName(name);
+		return ResponseEntity.ok().body(obj);
+	}
 
 	/**
 	 * Inserts a new product in the list.
