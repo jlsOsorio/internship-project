@@ -56,8 +56,9 @@ public class OperatingFundService {
 			persistData(obj, dto);
 
 			if (obj.getEntryQty() <= 0) {
-				throw new ServiceException("The entry quantity can't be negative.");
+				throw new ServiceException("The entry quantity must be positive.");
 			}
+			
 
 			if (obj.getMoment().isAfter(Instant.now())) {
 				throw new DateException("The inserted date must be before actual date.");

@@ -74,6 +74,11 @@ public class ProductService {
 			if (dto.getStock() < 0) {
 				throw new StockException("Invalid quantity: " + dto.getStock());
 			}
+			
+			if (dto.getName().isEmpty())
+			{
+				throw new ServiceException("Product name must not be empty.");
+			}
 
 			Product obj = new Product();
 			persistData(obj, dto);
@@ -99,7 +104,12 @@ public class ProductService {
 															// monitorizado). Desta forma, não há necessidade de ir
 															// buscar o objecto à base de dados.
 			if (checkName(id, obj)) {
-				throw new ServiceException("There is already someone with inserted unique data (name).");
+				throw new ServiceException("There is already a product with inserted unique data (name).");
+			}
+			
+			if (obj.getName().isEmpty())
+			{
+				throw new ServiceException("Product name must not be empty.");
 			}
 
 			updateData(entity, obj);

@@ -59,10 +59,14 @@ public class InvoiceService {
 
 	}
 
-	@Transactional // rollback total se acontecer algum erro em qualquer uma das comunicações com a
-					// base de dados
+	@Transactional // rollback if anything happens with any interaction with database
 	public InvoiceDTO insert(InvoiceInsertDTO dto) {
 		try {
+			if(dto.getCashRegisterId() == null || dto.getCashRegisterId() == 0)
+			{
+				throw new ServiceException("Please insert the cash register to order.");
+			}
+			
 			if (dto.getInvoicedProducts().isEmpty())
 			{
 				throw new ServiceException("There should be products in the bill.");
@@ -144,7 +148,7 @@ public class InvoiceService {
 		}
 
 		if (flag == false) {
-			throw new ServiceException("The cash register doesn't belong to the store where the employee belongs.");
+			throw new ServiceException("The cash register doesn't belong to the store where the employee is working.");
 		}
 		///////////////////////////////////////////////////////////////////////////////////////////////
 

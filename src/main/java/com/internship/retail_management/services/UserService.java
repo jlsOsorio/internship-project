@@ -59,6 +59,9 @@ public class UserService {
 				throw new ServiceException("Nif already exists!");
 			}
 
+			if (dto.getNif().toString().length() != 9) {
+				throw new ServiceException("Invalid Nif! Please insert a valid Nif (with 9 digits).");
+			}
 			// Instancia um novo user, porque na base de dados está um utilizador, e não o
 			// DTO
 			User obj = new User();
@@ -82,6 +85,10 @@ public class UserService {
 				throw new ServiceException("There is already someone with inserted unique data (email or nif).");
 			}
 
+			if (obj.getNif().toString().length() != 9) {
+				throw new ServiceException("Invalid Nif! Please insert a valid Nif (with 9 digits).");
+			}
+			
 			persistDataUpdate(entity, obj);
 
 			repository.save(entity);
@@ -158,7 +165,7 @@ public class UserService {
 		users.removeIf(user -> user.getId() == id);
 
 		for (User entity : users) {
-			if (entity.getEmail().equals(obj.getEmail()) || entity.getNif() == obj.getNif()) {
+			if (entity.getEmail().equals(obj.getEmail()) || entity.getNif().equals(obj.getNif())) {
 				return true;
 			}
 		}
