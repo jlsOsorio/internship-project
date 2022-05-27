@@ -1,6 +1,9 @@
 package com.internship.retail_management.services;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -11,9 +14,13 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.internship.retail_management.dto.ChangePasswordDTO;
+import com.internship.retail_management.dto.UserAuthDTO;
 import com.internship.retail_management.dto.UserDTO;
 import com.internship.retail_management.dto.UserInsertDTO;
+import com.internship.retail_management.dto.UserLoginDTO;
 import com.internship.retail_management.dto.UserUpdateDTO;
 import com.internship.retail_management.entities.User;
 import com.internship.retail_management.repositories.UserRepository;
@@ -23,6 +30,9 @@ import com.internship.retail_management.services.exceptions.ServiceException;
 
 @Service
 public class UserService {
+	
+	public static final Integer TOKEN_EXP = 1000 * 60 * 60 * 8; //8h
+	public static final String SECRET = "cc253793-a31e-4893-9090-b973995a293a";
 
 	@Autowired
 	private UserRepository repository;
@@ -75,6 +85,36 @@ public class UserService {
 			throw new ServiceException("Something went wrong!");
 		}
 
+	}
+	
+	//Set login and generate token with user id and category on payload
+	public UserAuthDTO login(UserLoginDTO obj)
+	{		
+		User user = repository.findByEmail(obj.getEmail());
+		if (user == null) {
+			throw new ServiceException("Email not found!");
+		}
+		
+		Boolean matchPassword = passwordEncoder.matches(obj.getPassword(), user.getPassword());
+		
+		if (matchPassword == false)
+		{
+			throw new ServiceException("Invalid credentials!");
+		}
+		
+		UserAuthDTO userAuth = new UserAuthDTO(user);
+		Map<String, String> payload = new HashMap<>();
+		
+		payload.put("id", user.getId().toString());
+		payload.put("category", user.getCategory().toString());
+		
+		String token = JWT.create().withPayload(payload)
+				.withExpiresAt(new Date(System.currentTimeMillis() + TOKEN_EXP))
+				.sign(Algorithm.HMAC512(SECRET));
+		
+		userAuth.setToken(token);
+		
+		return userAuth;
 	}
 
 	public UserDTO update(Long id, UserUpdateDTO obj) {

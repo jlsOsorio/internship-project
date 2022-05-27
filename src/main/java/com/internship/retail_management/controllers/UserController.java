@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.internship.retail_management.dto.ChangePasswordDTO;
+import com.internship.retail_management.dto.UserAuthDTO;
 import com.internship.retail_management.dto.UserDTO;
 import com.internship.retail_management.dto.UserInsertDTO;
+import com.internship.retail_management.dto.UserLoginDTO;
 import com.internship.retail_management.dto.UserUpdateDTO;
 import com.internship.retail_management.services.UserService;
 
@@ -72,6 +74,19 @@ public class UserController {
 		UserDTO obj = service.insert(dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).body(obj);
+
+	}
+	
+	/**
+	 * Login user.
+	 * 
+	 * @param obj user
+	 * @return response
+	 */
+	@PostMapping(value = "/login")
+	public ResponseEntity<UserAuthDTO> login(@RequestBody UserLoginDTO dto) {
+		UserAuthDTO obj = service.login(dto);
+		return ResponseEntity.ok().body(obj);
 
 	}
 
