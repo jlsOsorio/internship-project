@@ -65,13 +65,6 @@ public class StockMovementController {
 
 	}
 
-//	@PutMapping(value = "/{id}")
-//	public ResponseEntity<StockMovement> update(@PathVariable Long id, @RequestBody StockMovementInsertDTO dto) {
-//		StockMovement obj = service.update(id, dto);
-//		return ResponseEntity.ok().body(obj);
-//
-//	}
-
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		service.delete(id);

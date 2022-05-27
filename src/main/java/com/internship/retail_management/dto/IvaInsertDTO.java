@@ -5,25 +5,41 @@ import com.internship.retail_management.entities.enums.IvaValues;
 import com.internship.retail_management.services.Tax;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class IvaInsertDTO implements Tax {
 
-	private IvaValues value;
+	private Integer value;
 
 	public IvaInsertDTO(Iva entity) {
-		this.value = entity.getValue();
+		setValue(entity.getValue());
+	}
+	
+	/**
+	 * Gets IVA value.
+	 * 
+	 * @return value of IVA
+	 */
+	public IvaValues getValue() {
+		return IvaValues.valueOf(value);
+	}
+
+	/**
+	 * Sets IVA value.
+	 * 
+	 * @param value
+	 */
+	public void setValue(IvaValues value) {
+		if (value != null) {
+			this.value = value.getCode();
+		}
 	}
 
 	@Override
 	public Double getTax() {
-		return Double.valueOf(getValue().getCode()) / 100;
+		return Double.valueOf(value) / 100;
 	}
 
 }

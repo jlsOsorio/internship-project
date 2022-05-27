@@ -18,7 +18,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.internship.retail_management.dto.ProductDTO;
 import com.internship.retail_management.dto.ProductInsertDTO;
 import com.internship.retail_management.dto.ProductUpdateDTO;
-import com.internship.retail_management.entities.Product;
 import com.internship.retail_management.services.ProductService;
 
 /**
@@ -86,12 +85,12 @@ public class ProductController {
 		// 201), exista no cabeçalho uma location com o endereço que retorna esse mesmo
 		// objecto.
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-		Product newProd = new Product();
-		newProd.setId(obj.getId());
-		newProd.setName(obj.getName());
-		newProd.setStock(obj.getStock());
-		newProd.setIvaValue(service.getIva(obj.getIvaValue()));
-		newProd.setGrossPrice(obj.getGrossPrice());
+//		Product newProd = new Product();
+//		newProd.setId(obj.getId());
+//		newProd.setName(obj.getName());
+//		newProd.setStock(obj.getStock());
+//		newProd.setIvaValue(service.getIva(obj.getIvaValue()));
+//		newProd.setGrossPrice(obj.getGrossPrice());
 		// newProd.setTaxedPrice(service.getIva(obj.getIvaValue()));
 //		newProd.getStockMovements().add(new StockMovement(null, newProd.getStock(), Movement.IN, newProd));
 //		smService.insert(newProd.getStockMovements().get(0));

@@ -69,10 +69,16 @@ public class StoreService {
 	@Transactional
 	public Store update(Long id, StoreInsertDTO obj) {
 		try {
+
+			if (obj.getNumberCashRegisters() <= 0) {
+				throw new ServiceException("The store must have more than one cash register.");
+			}
+
 			Store entity = repository.findById(id).get();
 
 			persistData(entity, obj);
 			int diffNumberCR = Math.abs(obj.getNumberCashRegisters() - entity.getCashRegisters().size());
+
 			if (entity.getCashRegisters().size() < obj.getNumberCashRegisters()) {
 				for (int i = 0; i < diffNumberCR; i++) {
 					CashRegister newCR = crService.insert(new CashRegister(null, entity));
@@ -86,12 +92,16 @@ public class StoreService {
 				}
 			}
 
-			return repository.save(entity);
+			repository.save(entity);
+			repository.flush();
+			return entity;
 
 		} catch (NoSuchElementException e) {
 			throw new ResourceNotFoundException(id);
 		} catch (IllegalFormatException e) {
 			throw new ServiceException("Something went wrong!");
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseException(e.getMessage());
 		}
 	}
 
