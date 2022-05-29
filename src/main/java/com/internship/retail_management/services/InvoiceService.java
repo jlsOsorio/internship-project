@@ -85,6 +85,7 @@ public class InvoiceService {
 				invoicedProduct.setProduct(product);
 				invoicedProduct.setQuantity(dto.getInvoicedProducts().get(name));
 				invoicedProduct.setInvoice(obj);
+				invoicedProduct.setIvaValue(product.getIvaValue());
 				invoicedProduct.setSubTotalNoIva();
 				invoicedProduct.setSubTotalIva();
 				obj.getInvoicedProducts().add(invoicedProduct);

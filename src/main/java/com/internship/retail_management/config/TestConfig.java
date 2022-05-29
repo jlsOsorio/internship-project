@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.internship.retail_management.entities.CashRegister;
 import com.internship.retail_management.entities.Invoice;
@@ -66,6 +67,9 @@ public class TestConfig implements CommandLineRunner {
 	
 	@Autowired
 	private InvoiceRepository invoiceRepository;
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -83,10 +87,10 @@ public class TestConfig implements CommandLineRunner {
 
 		cashRegisterRepository.saveAll(Arrays.asList(c1, c2, c3, c4, c5));
 
-		User emp1 = new User(null, "Maria", "maria@gmail.com", "123456", "911232112",
-				Instant.parse("1974-06-20T19:53:07Z"), 123456789L, Category.EMPLOYEE, Status.ACTIVE, "Rua de cima",
+		User emp1 = new User(null, "Admin", "maria@gmail.com", passwordEncoder.encode("123456"), "911232112",
+				Instant.parse("1974-06-20T19:53:07Z"), 123456789L, Category.SUPERVISOR, Status.ACTIVE, "Rua de cima",
 				"Maia", "1234-123", s1);
-		User emp2 = new User(null, "Quim", "quim@gmail.com", "123456", "911233112",
+		User emp2 = new User(null, "Quim", "quim@gmail.com", passwordEncoder.encode("123456"), "911233112",
 				Instant.parse("1980-06-20T19:53:07Z"), 123456784L, Category.EMPLOYEE, Status.ACTIVE, "Rua de baixo",
 				"Gaia", "1235-123", s2);
 
@@ -130,9 +134,9 @@ public class TestConfig implements CommandLineRunner {
 		
 		invoiceRepository.saveAll(Arrays.asList(in1, in2));
 		
-		InvoicedProduct ip1 = new InvoicedProduct(null, 5, p1, in1);
-		InvoicedProduct ip2 = new InvoicedProduct(null, 10, p2, in1);
-		InvoicedProduct ip3 = new InvoicedProduct(null, 10, p4, in2);
+		InvoicedProduct ip1 = new InvoicedProduct(null, 5, p1.getIvaValue(), p1, in1);
+		InvoicedProduct ip2 = new InvoicedProduct(null, 10, p2.getIvaValue(), p2, in1);
+		InvoicedProduct ip3 = new InvoicedProduct(null, 10, p4.getIvaValue(), p4, in2);
 
 		invoicedProductRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 		

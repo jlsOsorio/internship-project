@@ -84,6 +84,15 @@ public class Product implements Serializable {
 		setTaxedPrice(ivaValue);
 	}
 
+	public Product(Product product) {
+		this.setId(null);
+		this.setName(product.getName());
+		this.setStock(product.getStock());
+		this.setIvaValue(product.getIvaValue());
+		this.setGrossPrice(product.getGrossPrice());
+		this.setTaxedPrice(product.ivaValue);
+	}
+	
 	/**
 	 * Retrieves the taxed price by multiplying the IVA value with the gross price.
 	 * 
@@ -141,4 +150,5 @@ public class Product implements Serializable {
 			}
 		}
 	}
+	
 }

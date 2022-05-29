@@ -15,7 +15,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.internship.retail_management.dto.ChangePasswordDTO;
 import com.internship.retail_management.dto.UserAuthDTO;
 import com.internship.retail_management.dto.UserDTO;
@@ -24,6 +27,7 @@ import com.internship.retail_management.dto.UserLoginDTO;
 import com.internship.retail_management.dto.UserUpdateDTO;
 import com.internship.retail_management.entities.User;
 import com.internship.retail_management.repositories.UserRepository;
+import com.internship.retail_management.services.exceptions.AuthException;
 import com.internship.retail_management.services.exceptions.DatabaseException;
 import com.internship.retail_management.services.exceptions.ResourceNotFoundException;
 import com.internship.retail_management.services.exceptions.ServiceException;
@@ -116,6 +120,47 @@ public class UserService {
 		
 		return userAuth;
 	}
+	
+	public UserDTO getUserByToken(String authHeader) {
+			if (authHeader == null)
+			{
+				throw new AuthException("No token provided.");
+			}
+			
+			String[] token = authHeader.split(" ");
+			
+			if (token.length != 2)
+			{
+				throw new AuthException("Token error.");
+			}
+		
+			if (!token[0].equals("Bearer")|| token[1].isEmpty())
+			{
+				throw new AuthException("Invalid token.");
+			}
+			
+			
+		    //System.out.println(claim.);
+			try {
+				Algorithm algorithm = Algorithm.HMAC512(SECRET); //use more secure key
+			    JWTVerifier verifier = JWT.require(algorithm)
+			        .build(); //Reusable verifier instance
+			    DecodedJWT jwt = verifier.verify(token[1]);
+			    
+			    //Get id payload from token
+			    Map<String, Claim> claims = jwt.getClaims();
+			    Long idUser= Long.parseLong(claims.get("id").asString());
+				Optional<User> userLoggedIn = repository.findById(idUser);
+				UserDTO userLoggedInDTO = new UserDTO(userLoggedIn.get());
+			    return userLoggedInDTO;
+			} catch (RuntimeException e) {
+				throw new AuthException("Invalid token.");
+			}
+			
+		    
+		} 
+		
+	
 
 	public UserDTO update(Long id, UserUpdateDTO obj) {
 		try {

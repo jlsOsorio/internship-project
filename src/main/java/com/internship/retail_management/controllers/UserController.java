@@ -3,6 +3,8 @@ package com.internship.retail_management.controllers;
 import java.net.URI;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,10 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.internship.retail_management.dto.ChangePasswordDTO;
-import com.internship.retail_management.dto.UserAuthDTO;
 import com.internship.retail_management.dto.UserDTO;
 import com.internship.retail_management.dto.UserInsertDTO;
-import com.internship.retail_management.dto.UserLoginDTO;
 import com.internship.retail_management.dto.UserUpdateDTO;
 import com.internship.retail_management.services.UserService;
 
@@ -62,6 +62,17 @@ public class UserController {
 		return ResponseEntity.ok().body(obj);
 
 	}
+	
+	@GetMapping(value = "/me")
+	public ResponseEntity<UserDTO> findMe(HttpServletRequest request) {
+		Long userId = Long.parseLong(request.getAttribute("userId").toString());
+		
+		UserDTO obj = service.findById(userId);
+		
+		return ResponseEntity.ok().body(obj);
+
+	}
+
 
 	/**
 	 * Inserts a new user in the list.
@@ -77,18 +88,7 @@ public class UserController {
 
 	}
 	
-	/**
-	 * Login user.
-	 * 
-	 * @param obj user
-	 * @return response
-	 */
-	@PostMapping(value = "/login")
-	public ResponseEntity<UserAuthDTO> login(@RequestBody UserLoginDTO dto) {
-		UserAuthDTO obj = service.login(dto);
-		return ResponseEntity.ok().body(obj);
-
-	}
+	
 
 	/**
 	 * Edit a user with his id.
@@ -104,9 +104,10 @@ public class UserController {
 
 	}
 	
-	@PatchMapping(value = "/{id}")
-	public ResponseEntity<UserDTO> changePassword(@PathVariable Long id, @RequestBody ChangePasswordDTO dto) {
-		UserDTO obj = service.changePassword(id, dto);
+	@PatchMapping(value = "/me/changepassword")
+	public ResponseEntity<UserDTO> changePassword(@RequestBody ChangePasswordDTO dto, HttpServletRequest request) {
+		Long userId = Long.parseLong(request.getAttribute("userId").toString());
+		UserDTO obj = service.changePassword(userId, dto);
 		return ResponseEntity.ok().body(obj);
 	}
 
@@ -122,4 +123,5 @@ public class UserController {
 		return ResponseEntity.noContent().build();
 
 	}
+
 }

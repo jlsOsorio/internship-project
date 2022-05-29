@@ -71,9 +71,9 @@ public class InvoicedProductRepositoryTests {
 		Product p3 = new Product(null, "cereais", 20, 1.50, i2);
 		productRepository.saveAll(Arrays.asList(p1, p2, p3));
 		
-		InvoicedProduct ip1 = new InvoicedProduct(null, 5, p1, in1);
-		InvoicedProduct ip2 = new InvoicedProduct(null, 10, p2, in1);
-		InvoicedProduct ip3 = new InvoicedProduct(null, 10, p3, in2);
+		InvoicedProduct ip1 = new InvoicedProduct(null, 5, p1.getIvaValue(), p1, in1);
+		InvoicedProduct ip2 = new InvoicedProduct(null, 10, p2.getIvaValue(), p2, in1);
+		InvoicedProduct ip3 = new InvoicedProduct(null, 10, p3.getIvaValue(), p3, in2);
 		invoicedProductRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 		
 		Assertions.assertThat(ip1.getId()).isGreaterThan(0);

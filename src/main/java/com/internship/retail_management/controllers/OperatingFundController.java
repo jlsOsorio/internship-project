@@ -3,6 +3,8 @@ package com.internship.retail_management.controllers;
 import java.net.URI;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -56,6 +58,14 @@ public class OperatingFundController {
 		List<OperatingFund> list = service.findByUser(userId);
 		return ResponseEntity.ok().body(list); // retorna a resposta
 	}
+	
+	@GetMapping(value = "/me")
+	public ResponseEntity<List<OperatingFund>> findMe(HttpServletRequest request) {
+		Long userId = Long.parseLong(request.getAttribute("userId").toString());
+
+		List<OperatingFund> list = service.findByUser(userId);
+		return ResponseEntity.ok().body(list); // retorna a resposta
+	}
 
 	/**
 	 * Creates an operating fund from a user.
@@ -65,6 +75,21 @@ public class OperatingFundController {
 	 */
 	@PostMapping(value = "/{userId}")
 	public ResponseEntity<OperatingFund> insert(@PathVariable Long userId, @RequestBody OperatingFundInsertDTO dto) {
+		OperatingFund obj = service.insert(userId, dto);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+		return ResponseEntity.created(uri).body(obj);
+	}
+	
+	/**
+	 * Creates an operating fund from authenticated user.
+	 * 
+	 * @param request	Servlet request
+	 * @param dto	Request body of operating fund
+	 * @return response of the created operating fund
+	 */
+	@PostMapping(value = "/me")
+	public ResponseEntity<OperatingFund> insertMyOpFund(HttpServletRequest request, @RequestBody OperatingFundInsertDTO dto) {
+		Long userId = Long.parseLong(request.getAttribute("userId").toString());
 		OperatingFund obj = service.insert(userId, dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).body(obj);

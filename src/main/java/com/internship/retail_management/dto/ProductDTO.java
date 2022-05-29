@@ -44,5 +44,5 @@ public class ProductDTO {
 		this.taxedPrice = entity.getTaxedPrice();
 		this.stockMovements.addAll(entity.getStockMovements());
 	}
-
+	
 }

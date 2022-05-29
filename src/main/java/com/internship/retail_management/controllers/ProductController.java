@@ -65,11 +65,11 @@ public class ProductController {
 	 * @param id product's id
 	 * @return response
 	 */
-	@GetMapping(value = "/product/{name}")
-	public ResponseEntity<ProductDTO> findByName(@PathVariable String name) {
-		ProductDTO obj = service.findByName(name);
-		return ResponseEntity.ok().body(obj);
-	}
+//	@GetMapping(value = "/product/{name}")
+//	public ResponseEntity<ProductDTO> findByName(@PathVariable String name) {
+//		ProductDTO obj = service.findByName(name);
+//		return ResponseEntity.ok().body(obj);
+//	}
 
 	/**
 	 * Inserts a new product in the list.

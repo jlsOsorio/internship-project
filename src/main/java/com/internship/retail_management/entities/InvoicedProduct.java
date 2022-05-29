@@ -40,6 +40,10 @@ public class InvoicedProduct implements Serializable {
 	@EqualsAndHashCode.Include
 	private Long id;
 	private Integer quantity;
+	
+	@ManyToOne
+	@JoinColumn(name = "iva_id")
+	private Iva ivaValue;
 
 	@ManyToOne
 	@JoinColumn(name = "product_id")
@@ -64,10 +68,11 @@ public class InvoicedProduct implements Serializable {
 	 * @param product  product's id
 	 * @param invoice  invoice's id
 	 */
-	public InvoicedProduct(Long id, Integer quantity, Product product, Invoice invoice) {
+	public InvoicedProduct(Long id, Integer quantity, Iva ivaValue, Product product, Invoice invoice) {
 		super();
 		this.id = id;
 		this.quantity = quantity;
+		this.ivaValue = ivaValue;
 		this.product = product;
 		this.invoice = invoice;
 		this.product.getInvoicedProducts().add(this);
