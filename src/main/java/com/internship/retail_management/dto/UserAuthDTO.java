@@ -1,6 +1,7 @@
 package com.internship.retail_management.dto;
 
 import com.internship.retail_management.entities.User;
+import com.internship.retail_management.entities.enums.Category;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,7 +31,9 @@ import lombok.Setter;
  */
 public class UserAuthDTO {
 
+	private Long id;
 	private String email;
+	private Category category;
 	private String token;
 
 	/**
@@ -39,6 +42,8 @@ public class UserAuthDTO {
 	 * @param entity
 	 */
 	public UserAuthDTO(User entity) {
+		this.id = entity.getId();
 		this.email = entity.getEmail();
+		this.category = entity.getCategory();
 	}
 }

@@ -15,6 +15,7 @@ public class InvoicedProductDTO {
 
 	private Long id;
 	private Integer quantity;
+	private Long productId;
 	private String productName;
 	private Integer ivaValue;
 	private Double subTotalNoIva;
@@ -23,6 +24,7 @@ public class InvoicedProductDTO {
 	public InvoicedProductDTO(InvoicedProduct entity) {
 		this.id = entity.getId();
 		this.quantity = entity.getQuantity();
+		this.productId = entity.getProduct().getId();
 		this.productName = entity.getProduct().getName();
 		this.ivaValue = entity.getIvaValue().getValue().getCode();
 		this.subTotalNoIva = entity.getSubTotalNoIva();

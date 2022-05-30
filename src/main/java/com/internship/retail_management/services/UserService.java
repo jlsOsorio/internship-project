@@ -111,6 +111,8 @@ public class UserService {
 		
 		payload.put("id", user.getId().toString());
 		payload.put("category", user.getCategory().toString());
+		payload.put("email", user.getEmail());
+		payload.put("store", user.getStore().getId().toString());
 		
 		String token = JWT.create().withPayload(payload)
 				.withExpiresAt(new Date(System.currentTimeMillis() + TOKEN_EXP))
