@@ -132,6 +132,12 @@ public class TestConfig implements CommandLineRunner {
 		Invoice in1 = new Invoice(null, Instant.now(), TransactionType.DEBIT, emp1, c5);
 		Invoice in2 = new Invoice(null, Instant.now(), TransactionType.CREDIT, emp2, c2);
 		
+		in1.setTotalNoIva();
+		in1.setTotalIva();
+		
+		in2.setTotalNoIva();
+		in2.setTotalIva();
+		
 		invoiceRepository.saveAll(Arrays.asList(in1, in2));
 		
 		InvoicedProduct ip1 = new InvoicedProduct(null, 5, p1.getIvaValue(), p1, in1);

@@ -52,7 +52,7 @@ public class Invoice implements Serializable {
 
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
-	private Integer transaction;
+	private Integer transactionType;
 
 	@Setter(AccessLevel.NONE)
 	private Double totalNoIva;
@@ -77,16 +77,16 @@ public class Invoice implements Serializable {
 	 * 
 	 * @param invoiceNumber invoice's id
 	 * @param date          invoice's date
-	 * @param transaction   invoice's transaction
+	 * @param transactionType   invoice's transactionType
 	 * @param user          user's id
 	 * @param cashRegister  cash register's id
 	 */
-	public Invoice(Long invoiceNumber, Instant date, TransactionType transaction, User user,
+	public Invoice(Long invoiceNumber, Instant date, TransactionType transactionType, User user,
 			CashRegister cashRegister) {
 		super();
 		this.invoiceNumber = invoiceNumber;
 		this.date = date;
-		setTransaction(transaction);
+		setTransaction(transactionType);
 		this.user = user;
 		this.cashRegister = cashRegister;
 		setTotalNoIva();
@@ -94,22 +94,22 @@ public class Invoice implements Serializable {
 	}
 
 	/**
-	 * Gets a transaction.
+	 * Gets a transactionType.
 	 * 
-	 * @return transaction
+	 * @return transactionType
 	 */
 	public TransactionType getTransaction() {
-		return TransactionType.valueOf(transaction);
+		return TransactionType.valueOf(transactionType);
 	}
 
 	/**
-	 * Sets transaction.
+	 * Sets transactionType.
 	 * 
-	 * @param transaction transaction type
+	 * @param transactionType transactionType type
 	 */
-	public void setTransaction(TransactionType transaction) {
-		if (transaction != null) {
-			this.transaction = transaction.getCode();
+	public void setTransaction(TransactionType transactionType) {
+		if (transactionType != null) {
+			this.transactionType = transactionType.getCode();
 		}
 	}
 
