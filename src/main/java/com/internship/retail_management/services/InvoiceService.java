@@ -136,8 +136,7 @@ public class InvoiceService {
 
 		User user = userService.userFromUserDTO(userService.findById(dto.getUserId()));
 
-		/////////////////// VERIFICAR SE CAIXA PERTENCE À LOJA ONDE ESTÁ O UTILIZADOR
-		/////////////////// ///////////////////
+		//Verify if cash register belongs to the store where the user is working
 		Boolean flag = false;
 
 		Integer cashRegistersNumber = user.getStore().getCashRegisters().size();
@@ -145,13 +144,13 @@ public class InvoiceService {
 		for (int i = 0; i < cashRegistersNumber; i++) {
 			if (dto.getCashRegisterId() == user.getStore().getCashRegisters().get(i).getId()) {
 				flag = true;
+				break;
 			}
 		}
 
 		if (flag == false) {
 			throw new ServiceException("The cash register doesn't belong to the store where the employee is working.");
 		}
-		///////////////////////////////////////////////////////////////////////////////////////////////
 
 		obj.setDate(Instant.now());
 		obj.setTransaction(dto.getTransaction());
